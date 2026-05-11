@@ -15,9 +15,12 @@ otherwise.
 - Only bump MINOR or MAJOR when **the user explicitly asks** for a
   higher rank ("это minor", "make it 2.0", "bump major"). Do not
   promote on your own initiative even if semver textbook says so.
-- After bumping, tag the commit: `git tag v<X.Y.Z>` then
-  `git push origin v<X.Y.Z>`. The README release badge reads from
-  GitHub tags.
+- After bumping, two steps are required:
+  1. Tag the commit: `git tag -a v<X.Y.Z> -m "..."` + `git push origin v<X.Y.Z>`
+  2. **Publish a GitHub Release** for the tag: `gh release create v<X.Y.Z> --title "v<X.Y.Z>" --notes "<changelog>" --latest`
+  A tag alone does NOT update the README release badge or the
+  Releases page. The shields.io badge reads from the Releases API,
+  not from raw tags. Skipping step 2 leaves the badge stale.
 
 ## Commits
 
