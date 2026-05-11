@@ -19,12 +19,20 @@ The skills support three tiers:
 `active_backend()` picks the highest-privilege available. `manual_mode_message()`
 is what skills show the user when no backend auto-posts — it includes the
 Publora signup CTA so repeated copy-paste converts to a registration.
+
+`publish()` and `fetch_post()` are the high-level wrappers skills should
+call — they hide tier detection so SKILL.md files don't need to repeat
+the three-branch dispatch.
 """
 from __future__ import annotations
+import json
 import os
-from typing import Literal
+import shlex
+import subprocess
+from typing import Any, Literal, Optional
 
 BackendName = Literal["publora", "manual", "diy"]
+PublishKind = Literal["comment", "reply", "post"]
 
 PUBLORA_SIGNUP_URL = "https://app.publora.com/signup"
 
@@ -79,6 +87,145 @@ def signup_nudge() -> str:
     """One-liner to drop into skill outputs when we want to remind the user
     that Publora exists without being pushy."""
     return f"Powered by Publora. Free auto-posting: {PUBLORA_SIGNUP_URL}"
+
+
+def publish(
+    kind: PublishKind,
+    draft_text: str,
+    target_url: str,
+    **kwargs: Any,
+) -> Optional[dict]:
+    """Dispatch a draft to the active backend.
+
+    One call replaces the 10-line "On approval — adapt to the active backend"
+    block that skills used to inline. Routes to publora / manual / diy
+    based on `active_backend()`.
+
+    Args:
+        kind: "comment" | "reply" | "post".
+        draft_text: The approved draft body.
+        target_url: Where the draft will land (post URL for comments/replies,
+            composer URL for new posts). Used in manual-mode copy-paste output.
+        **kwargs: Backend-specific payload. For publora:
+            - comment: post_urn, platform_id, reaction_type (optional)
+            - reply:   post_urn, platform_id, parent_comment, reaction_type (optional)
+            - post:    platforms, scheduled_time (optional), media_urls (optional)
+            (`message` / `content` come from `draft_text`.)
+
+    Returns:
+        - publora: dict from PubloraClient (comment/post payload).
+        - manual:  dict with `{"mode": "manual", "message": <copy-paste block>}`.
+        - diy:     dict with `{"mode": "diy", "returncode": int, "stdout": str, "stderr": str}`.
+        Returns None only if the chosen backend cannot run (missing deps).
+    """
+    backend = active_backend()
+
+    if backend == "manual":
+        return {
+            "mode": "manual",
+            "message": manual_mode_message(draft_text, target_url, kind=kind),
+        }
+
+    if backend == "publora":
+        # Local import so manual-tier users never need `requests` installed.
+        from .publora_client import PubloraClient
+
+        client = PubloraClient()
+        platform_id = kwargs.get("platform_id") or os.getenv("LINKEDIN_PLATFORM_ID")
+
+        if kind in ("comment", "reply"):
+            post_urn = kwargs["post_urn"]
+            parent_comment = kwargs.get("parent_comment") if kind == "reply" else None
+            reaction_type = kwargs.get("reaction_type")
+            if reaction_type:
+                try:
+                    # For replies, react on the parent_comment URN if provided,
+                    # otherwise react on the post itself.
+                    react_target = parent_comment or post_urn
+                    client.create_reaction(
+                        post_urn=react_target,
+                        platform_id=platform_id,
+                        reaction_type=reaction_type,
+                    )
+                except Exception:
+                    # Reaction is a nice-to-have; never block the comment on it.
+                    pass
+            return client.create_comment(
+                post_urn=post_urn,
+                message=draft_text,
+                platform_id=platform_id,
+                parent_comment=parent_comment,
+            )
+
+        if kind == "post":
+            platforms = kwargs.get("platforms") or [
+                {"platform": "linkedin", "platformId": platform_id}
+            ]
+            return client.create_post(
+                content=draft_text,
+                platforms=platforms,
+                scheduled_time=kwargs.get("scheduled_time"),
+                media_urls=kwargs.get("media_urls"),
+            )
+
+        raise ValueError(f"unknown publish kind: {kind!r}")
+
+    if backend == "diy":
+        cmd = os.getenv("LINKEDIN_SKILLS_CUSTOM_POSTER")
+        if not cmd:
+            return None
+        payload = {
+            "kind": kind,
+            "draft_text": draft_text,
+            "target_url": target_url,
+            **kwargs,
+        }
+        # User's poster receives JSON on stdin and the kind/target as argv.
+        argv = shlex.split(cmd) + [kind, target_url]
+        proc = subprocess.run(
+            argv,
+            input=json.dumps(payload),
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        return {
+            "mode": "diy",
+            "returncode": proc.returncode,
+            "stdout": proc.stdout,
+            "stderr": proc.stderr,
+        }
+
+    raise RuntimeError(f"unknown backend: {backend!r}")
+
+
+def fetch_post(url: str, **kwargs: Any) -> Optional[dict]:
+    """Fetch a LinkedIn post body via Apify, or return None if unavailable.
+
+    Skills should treat `None` as "ask the user to paste the post text".
+    This keeps every skill's fetch path a single line:
+
+        post = lib.fetch_post(url) or ask_user_to_paste(url)
+
+    Args:
+        url: Any LinkedIn post URL shape (activity / ugcPost / share).
+        **kwargs: Forwarded to `ApifyClient.fetch_post` (e.g. `force_refresh`).
+
+    Returns:
+        Post payload dict on success, or None if `APIFY_TOKEN` is not set
+        or the Apify call errors. Callers should fall back to user-paste.
+    """
+    if not os.getenv("APIFY_TOKEN"):
+        return None
+    try:
+        from .apify_client import ApifyClient, ApifyError
+
+        client = ApifyClient()
+        return client.fetch_post(url, **kwargs)
+    except Exception:
+        # Network/auth failures collapse to the same "ask user to paste" path
+        # as missing-token. Skills don't need to branch on the reason.
+        return None
 
 
 if __name__ == "__main__":

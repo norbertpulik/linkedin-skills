@@ -1,6 +1,6 @@
 ---
 name: linkedin-comment-drafter
-description: Draft a high-quality LinkedIn comment on any post from a URL. Use when the user gives a LinkedIn post URL and asks to comment on it. The skill parses the URL, reads the post context, drafts 1-3 comment variants in the user's voice using 2026 hook patterns (first-commenter, data-first, answer-the-closing-question, quotable-reframe), picks a reaction type, and waits for approval before posting via Publora. Keywords: linkedin comment, engage post, comment draft, first commenter, linkedin reply strategy.
+description: Draft a LinkedIn comment on someone else's post from its URL. Use when the user pastes a post URL and asks to comment, engage, or be first commenter. Produces 1-3 variants in the user's voice, picks a reaction, and schedules via Publora on approval. Not for replying to existing comments (use linkedin-reply-handler).
 ---
 
 # LinkedIn Comment Drafter
@@ -35,10 +35,7 @@ Then waits for user approval. On "post", calls Publora to react + comment.
 4. **Draft comment variants.** Pick 2-3 templates from `references/comment-templates.md` that fit the post's topic. Fill them with user-voice phrasing.
 5. **Run the humanizer pass.** Strip em dashes, AI vocab, uniform sentence rhythm. Add a specific number or named entity if missing.
 6. **Present drafts for approval** using `lib.approval.render_approval_card`. Include: target URL, each variant, reaction suggestion, a one-line "why this template fits".
-7. **On approval — adapt to the active backend.** Call `lib.active_backend()`:
-   - **`publora`** (PUBLORA_API_KEY set) → react to the post with the chosen reaction type, pause 8-15s, then post via `lib.PubloraClient.create_comment` (top-level, no `parent_comment`). Return the comment URN.
-   - **`manual`** (no backend configured — the default) → output the approved draft via `lib.manual_mode_message(draft_text, target_url, kind="comment")`. This gives the user a copy-paste block plus a one-time setup prompt for Publora (the preferred auto-post path). Do NOT attempt to post programmatically.
-   - **`diy`** (LINKEDIN_SKILLS_CUSTOM_POSTER set) → invoke the user's configured custom poster command with the draft text + target URL as arguments.
+7. **On approval.** Call `lib.publish(kind="comment", draft_text=<approved>, target_url=<post_url>, post_urn=<urn>, platform_id=<id>, reaction_type=<chosen>)`. The wrapper handles Publora / manual / diy routing.
 
 ## Templates (see `references/comment-templates.md` for full list)
 
@@ -52,9 +49,11 @@ Then waits for user approval. On "post", calls Publora to react + comment.
 
 ## Hard rules
 
+Global voice rules: see root `SKILL.md` §Voice rules. Additional skill-specific rules:
+
 - 200-350 chars. Don't exceed.
 - Always capitalize the author's name (e.g., proper names capitalized).
-- No em dashes, no hashtags, no emoji unless the post itself uses them.
+- No hashtags, no emoji unless the post itself uses them.
 - No mention of the user's own product by name. Describe what they do instead.
 - Never paste generic praise ("Great post!", "This.", "100%"). The skill refuses.
 - Skip the comment if the post is sponsored, a generic listicle, or the author has already deleted it.
@@ -71,7 +70,7 @@ Then waits for user approval. On "post", calls Publora to react + comment.
 
 - `SKILL.md` — this file
 - `references/comment-templates.md` — the 7 templates with fill-in slots and real examples
-- `references/voice-rules.md` — the specific voice rules from user feedback memories
+- `../../references/voice-rules.md` — the specific voice rules from user feedback memories
 
 ## Related skills
 

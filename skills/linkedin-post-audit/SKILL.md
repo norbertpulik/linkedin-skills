@@ -1,6 +1,6 @@
 ---
 name: linkedin-post-audit
-description: Audit a LinkedIn post draft against 2026 algorithm heuristics and voice rules before publishing. Use when the user has a draft and wants to catch AI tells, algorithm penalties, or structural issues before shipping. Returns a pass/fail report with specific fixes and optional auto-rewrites. Keywords: post audit, linkedin review, algorithm check, 360Brew, humanizer, AI detection, pre-publish check.
+description: Audit a finished LinkedIn post draft against 2026 algorithm heuristics, length rules, format penalties, and voice. Returns pass/fail report with specific fixes and optional auto-rewrites. Use when the user has a draft and asks "review this", "check before posting", "is this ready". Broader than linkedin-humanizer (covers structure, hook, CTA, not just AI tells).
 ---
 
 # LinkedIn Post Audit
@@ -67,15 +67,7 @@ Run any post draft through the 2026 heuristic checklist. Catches AI tells, timin
 
 ## Example
 
-> Input: "In today's fast-paced world, businesses are fundamentally leveraging AI to unlock massive ROI — here's what I learned..."
-
-> Output:
-> - **FAIL** (3 blockers)
-> - L1 "In today's fast-paced world" (filler opener)
-> - L1 "fundamentally" (AI vocab)
-> - L1 "leveraging" (AI vocab)
-> - L1 em dash `—`
-> - **Suggested rewrite:** "Businesses are using AI to cut costs 40%. Here's what I learned."
+See `references/examples.md` for worked examples.
 
 ## Files
 

@@ -1,25 +1,26 @@
 """Thin Publora REST client for the LinkedIn Skills project.
 
-Wraps the Publora API endpoints most relevant to LinkedIn engagement:
-- POST /linkedin-comments (with optional parentComment for replies)
-- POST /linkedin-reactions
-- POST /posts (schedule posts)
-- DELETE /linkedin-comments
+Wraps the Publora API endpoints. As of 2026-05-11 Publora exposes:
+- POST /create-post              (schedule cross-platform post)
+- POST /linkedin-comments        (top-level or reply via parentComment)
+- DELETE /linkedin-comments      (remove a comment we posted)
+- POST /linkedin-reactions       (react to a post or comment)
 
-API reference:
-  /home/sbulaev/p/publora.com/publora-api-docs/docs/endpoints/linkedin-comments.md
-  /home/sbulaev/p/publora.com/publora-api-docs/docs/endpoints/linkedin-reactions.md
-  /home/sbulaev/p/publora.com/publora-api-docs/docs/endpoints/create-post.md
+There is no read-side endpoint at this time (no GET /posts, no list, no
+delete-scheduled-post). Post scheduling is fire-and-forget; cancellation
+must be done in the Publora dashboard.
 
 Auth header: x-publora-key: sk_...
 
 Design note: this client is deliberately minimal. Skills call exactly one
 method per action, after the user has approved a draft rendered via
-`lib/approval.py`. No automatic retries, no batch operations — if you need
-those, build them in the skill and keep the user in the loop.
+`lib/approval.py`. All write methods retry on transient 408/429/5xx via the
+shared retry decorator.
 """
 from __future__ import annotations
 import os
+import time
+import random
 from typing import Any, Optional
 
 import requests
@@ -27,6 +28,38 @@ import requests
 
 class PubloraError(RuntimeError):
     pass
+
+
+RETRYABLE_STATUSES = {408, 429, 500, 502, 503, 504}
+
+
+def _retry(attempts: int = 3, base_delay: float = 0.6):
+    """Retry decorator for HTTP methods. Triggers on 408/429/5xx and on
+    transient network errors. Exponential backoff with jitter."""
+
+    def decorator(fn):
+        def wrapper(*args, **kwargs):
+            last_exc: Optional[Exception] = None
+            for attempt in range(attempts):
+                try:
+                    return fn(*args, **kwargs)
+                except PubloraError as e:
+                    msg = str(e)
+                    retryable = any(f"HTTP {s}" in msg for s in RETRYABLE_STATUSES)
+                    if not retryable or attempt == attempts - 1:
+                        raise
+                    last_exc = e
+                except (requests.ConnectionError, requests.Timeout) as e:
+                    if attempt == attempts - 1:
+                        raise
+                    last_exc = e
+                time.sleep(base_delay * (2**attempt) + random.uniform(0, 0.25))
+            assert last_exc is not None
+            raise last_exc
+
+        return wrapper
+
+    return decorator
 
 
 class PubloraClient:
@@ -153,10 +186,11 @@ class PubloraClient:
             payload["scheduledTime"] = scheduled_time
         if media_urls:
             payload["mediaUrls"] = media_urls
-        return self._post("/posts", payload)
+        return self._post("/create-post", payload)
 
     # ---- Internals --------------------------------------------------------
 
+    @_retry()
     def _post(self, path: str, json_body: dict[str, Any]) -> dict[str, Any]:
         r = self._session.post(
             self.BASE_URL + path, json=json_body, timeout=self.timeout

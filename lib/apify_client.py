@@ -14,17 +14,22 @@ Actors used (all no-cookies, public, "$1-$5 per 1,000 results"):
       Fetch comments + replies on a post (by post ID or URL). Use for
       reply-handler thread structure and to avoid duplicate comment takes.
   - apimaestro/linkedin-profile-comments
-      Fetch a user's recent comments by username. Use for thread-engagement
-      author-reply monitoring.
+      Fetch a user's recent comments by username. Use for engagement-monitor
+      author-reply tracking.
   - scraping_solutions/linkedin-posts-engagers-likers-and-commenters-no-cookies
       Fetch the people who liked or commented on a post. Use for engagement
       analytics (group by seniority, company, role, ICP fit).
 
-Design note: deliberately minimal. No retries, no batch helpers. If you need
-those, build them in the skill and keep the user in the loop.
+Caching: in-process LRU (256 entries, 6h TTL). Pass `force_refresh=True` on
+any method to bypass. Retries on transient 408/429/5xx (3 attempts with
+exponential backoff + jitter).
 """
 from __future__ import annotations
+import json
 import os
+import random
+import time
+from collections import OrderedDict
 from typing import Any, Optional
 
 import requests
@@ -32,6 +37,37 @@ import requests
 
 class ApifyError(RuntimeError):
     pass
+
+
+RETRYABLE_STATUSES = {408, 429, 500, 502, 503, 504}
+CACHE_MAX_ENTRIES = 256
+CACHE_TTL_SECONDS = 6 * 60 * 60
+
+
+def _retry(attempts: int = 3, base_delay: float = 0.6):
+    def decorator(fn):
+        def wrapper(*args, **kwargs):
+            last_exc: Optional[Exception] = None
+            for attempt in range(attempts):
+                try:
+                    return fn(*args, **kwargs)
+                except ApifyError as e:
+                    msg = str(e)
+                    retryable = any(f"HTTP {s}" in msg for s in RETRYABLE_STATUSES)
+                    if not retryable or attempt == attempts - 1:
+                        raise
+                    last_exc = e
+                except (requests.ConnectionError, requests.Timeout) as e:
+                    if attempt == attempts - 1:
+                        raise
+                    last_exc = e
+                time.sleep(base_delay * (2**attempt) + random.uniform(0, 0.25))
+            assert last_exc is not None
+            raise last_exc
+
+        return wrapper
+
+    return decorator
 
 
 class ApifyClient:
@@ -54,22 +90,26 @@ class ApifyClient:
             )
         self.timeout = timeout
         self._session = requests.Session()
+        self._cache: OrderedDict[str, tuple[float, Any]] = OrderedDict()
 
     # ---- Post body --------------------------------------------------------
 
-    def fetch_post(self, post_url: str) -> dict[str, Any]:
+    def fetch_post(
+        self, post_url: str, *, force_refresh: bool = False
+    ) -> dict[str, Any]:
         """Return the post body, author, and engagement stats for one post.
 
         Args:
-            post_url: Any of LinkedIn's three URN URL shapes works. Activity
-                slug, ugcPost feed link, share link.
+            post_url: Any of LinkedIn's three URN URL shapes works.
+            force_refresh: If True, bypass cache and re-fetch from Apify.
 
         Returns:
             Dict with keys: text, authorName, authorProfileUrl, urn, url,
             numLikes, numComments, postedAtISO, plus extra metadata.
-            Raises ApifyError if the post can't be fetched.
         """
-        items = self._run_sync(self.POST_ACTOR, {"urls": [post_url]})
+        items = self._run_sync(
+            self.POST_ACTOR, {"urls": [post_url]}, force_refresh=force_refresh
+        )
         if not items:
             raise ApifyError(f"no post returned for {post_url}")
         return items[0]
@@ -82,21 +122,15 @@ class ApifyClient:
         post_id: str,
         max_items: int = 20,
         scrape_replies: bool = False,
+        force_refresh: bool = False,
     ) -> list[dict[str, Any]]:
         """Return comments (and optionally replies) on a post.
 
         Args:
-            post_id: Activity ID, ugcPost ID, or full post URL. The actor
-                accepts both.
-            max_items: Cap on comments returned. Defaults to 20.
-            scrape_replies: If True, each comment's `replies` list is
-                populated; otherwise comments only.
-
-        Returns:
-            List of comment dicts. Each has: comment_id, text, posted_at,
-            author, stats, comment_url, replies (possibly empty).
-            Note: this actor does NOT return the post body itself; combine
-            with fetch_post() if you need both.
+            post_id: Activity ID, ugcPost ID, or full post URL.
+            max_items: Cap on comments returned.
+            scrape_replies: If True, each comment's `replies` list is populated.
+            force_refresh: Bypass cache.
         """
         return self._run_sync(
             self.POST_COMMENTS_ACTOR,
@@ -105,6 +139,7 @@ class ApifyClient:
                 "maxItems": max_items,
                 "scrapeReplies": scrape_replies,
             },
+            force_refresh=force_refresh,
         )
 
     # ---- Profile (user) recent comments ----------------------------------
@@ -114,23 +149,13 @@ class ApifyClient:
         *,
         username: str,
         result_limit: int = 30,
+        force_refresh: bool = False,
     ) -> list[dict[str, Any]]:
-        """Return a user's most recent comments across LinkedIn.
-
-        Args:
-            username: The handle, i.e. last path segment of the profile URL.
-                For https://linkedin.com/in/your-handle, pass "your-handle".
-            result_limit: Cap on comments returned. Free-tier-friendly
-                default is 30.
-
-        Returns:
-            List of comment dicts. Each has: comment_text, comment_urn,
-            commenter, created_at, comment_stats, comment_link, and a
-            nested `post` dict with post_text, post_url, post_author.
-        """
+        """Return a user's most recent comments across LinkedIn."""
         return self._run_sync(
             self.PROFILE_COMMENTS_ACTOR,
             {"username": username, "resultLimit": result_limit},
+            force_refresh=force_refresh,
         )
 
     # ---- Post engagers (likers + commenters) -----------------------------
@@ -140,29 +165,61 @@ class ApifyClient:
         *,
         post_url: str,
         max_items: int = 50,
+        force_refresh: bool = False,
     ) -> list[dict[str, Any]]:
-        """Return the people who liked or commented on a post.
-
-        Args:
-            post_url: Full LinkedIn post URL.
-            max_items: Page cap. The actor paginates 50 per page; raise this
-                if you want a deeper sample. Each result-unit is $0.005.
-
-        Returns:
-            List of engager dicts. Each has: type ("likers" | "commenters"),
-            name, subtitle (job title + company), url_profile, content
-            (comment text if commenter, otherwise empty), datetime,
-            inputPostUrl. Use these to group engagers by ICP fit, seniority,
-            company, or peer/aspirational/prospect tier.
-        """
+        """Return the people who liked or commented on a post."""
         return self._run_sync(
             self.POST_ENGAGERS_ACTOR,
             {"url": post_url, "maxItems": max_items},
+            force_refresh=force_refresh,
         )
+
+    # ---- Cache helpers ----------------------------------------------------
+
+    @staticmethod
+    def _cache_key(actor_id: str, payload: dict[str, Any]) -> str:
+        return f"{actor_id}::{json.dumps(payload, sort_keys=True, default=str)}"
+
+    def _cache_get(self, key: str) -> Optional[Any]:
+        entry = self._cache.get(key)
+        if entry is None:
+            return None
+        ts, value = entry
+        if time.time() - ts > CACHE_TTL_SECONDS:
+            del self._cache[key]
+            return None
+        self._cache.move_to_end(key)
+        return value
+
+    def _cache_put(self, key: str, value: Any) -> None:
+        self._cache[key] = (time.time(), value)
+        self._cache.move_to_end(key)
+        while len(self._cache) > CACHE_MAX_ENTRIES:
+            self._cache.popitem(last=False)
 
     # ---- Internals --------------------------------------------------------
 
-    def _run_sync(self, actor_id: str, payload: dict[str, Any]) -> list[dict[str, Any]]:
+    def _run_sync(
+        self,
+        actor_id: str,
+        payload: dict[str, Any],
+        *,
+        force_refresh: bool = False,
+    ) -> list[dict[str, Any]]:
+        key = self._cache_key(actor_id, payload)
+        if not force_refresh:
+            cached = self._cache_get(key)
+            if cached is not None:
+                return cached
+        data = self._do_request(actor_id, payload)
+        result = data if isinstance(data, list) else []
+        self._cache_put(key, result)
+        return result
+
+    @_retry()
+    def _do_request(
+        self, actor_id: str, payload: dict[str, Any]
+    ) -> Any:
         url = (
             f"{self.BASE_URL}/acts/{actor_id}/run-sync-get-dataset-items"
             f"?token={self.token}"
@@ -182,4 +239,4 @@ class ApifyClient:
         data = r.json()
         if isinstance(data, dict) and "error" in data:
             raise ApifyError(f"actor failed: {data['error']}")
-        return data if isinstance(data, list) else []
+        return data

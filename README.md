@@ -167,9 +167,9 @@ pip install requests python-dotenv
 
 **Step 7.** Test it. Ask Claude:
 
-> "Schedule a test LinkedIn post via Publora 2 hours from now: 'testing the API connection'. Show me the response, then delete it."
+> "Schedule a test LinkedIn post via Publora 24 hours from now: 'testing the API connection — will cancel in dashboard'."
 
-If Publora returns a scheduled-post ID, you're set. If you get HTTP 401, your API key is wrong. If you get HTTP 400 about a missing platformId, your `LINKEDIN_PLATFORM_ID` isn't set. See [Troubleshooting](#troubleshooting).
+If Publora returns a scheduled-post ID, you're set. Cancel the post in the Publora dashboard before the scheduled time. If you get HTTP 401, your API key is wrong. If you get HTTP 400 about a missing platformId, your `LINKEDIN_PLATFORM_ID` isn't set. See [Troubleshooting](#troubleshooting).
 
 ## Voice rules
 

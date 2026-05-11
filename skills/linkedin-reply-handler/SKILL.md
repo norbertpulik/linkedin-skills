@@ -1,6 +1,6 @@
 ---
 name: linkedin-reply-handler
-description: Draft a reply to any existing LinkedIn comment from a URL. Use when the user wants to reply to a comment on someone else's post, reply to a reply on their own post, or follow up in a thread where the author just responded. The skill parses the commentUrn from the URL, figures out the correct parentComment target (LinkedIn flattens threads to 2 levels), drafts the reply in the user's voice, and waits for approval before posting via Publora. Keywords: linkedin reply, reply to comment, thread continuation, comment URL, parent comment URN.
+description: Draft a reply to a specific existing LinkedIn comment from its URL. Use when the user wants to reply to a comment on any post, or follow up after an author replied to them. Parses the commentUrn, resolves the correct parentComment target (LinkedIn flattens threads to 2 levels), and posts via Publora on approval. Not for top-level comments (use linkedin-comment-drafter).
 ---
 
 # LinkedIn Reply Handler
@@ -34,10 +34,7 @@ A LinkedIn URL containing `commentUrn=urn:li:comment:(activity:POST,COMMENT_ID)`
 4. **Draft the reply.** Follow the engagement templates in `references/reply-templates.md`. If the counterpart asked a question, answer it directly. If they pushed back, concede then sharpen.
 5. **Humanizer pass.** Strip em dashes, AI vocab, enforce varied sentence length.
 6. **Approval card.** Include thread preview (who said what in last 3 turns), the draft, reaction suggestion, and the parentComment URN we'll send.
-7. **On approval — adapt to the active backend.** Call `lib.active_backend()`:
-   - **`publora`** (PUBLORA_API_KEY set) → react on the specific comment being replied to, pause 8-15s, then post reply with the correct top-level `parentComment` URN.
-   - **`manual`** (no backend configured — the default) → output the approved reply via `lib.manual_mode_message(draft_text, target_url, kind="reply")`. Include the parent comment URL so the user knows exactly where to paste. Do NOT attempt to post.
-   - **`diy`** (LINKEDIN_SKILLS_CUSTOM_POSTER set) → invoke the custom poster with draft, target URL, and parent-comment URN.
+7. **On approval.** Call `lib.publish(kind="reply", draft_text=<approved>, target_url=<comment_url>, post_urn=<urn>, platform_id=<id>, parent_comment=<top_level_comment_urn>, reaction_type=<chosen>)`. The wrapper handles Publora / manual / diy routing.
 
 ## The flattening gotcha
 
@@ -63,10 +60,11 @@ Carol's reply doesn't nest under Bob's — it's pinned at level 2 to the same to
 
 ## Hard rules
 
+Global voice rules: see root `SKILL.md` §Voice rules. Additional skill-specific rules:
+
 - 150-300 chars. Replies are tighter than top-level comments.
 - React to the comment you're replying to, not to the parent post.
-- Capitalize the counterpart's first name.
-- Never paste a canned "thanks!" — either respond with content or don't reply.
+- Never paste a canned "thanks!". Either respond with content or don't reply.
 - If the thread is older than 72 hours, consider a DM instead (use `linkedin-engagement-monitor`).
 
 ## Example

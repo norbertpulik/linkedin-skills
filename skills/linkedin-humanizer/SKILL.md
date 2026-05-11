@@ -1,6 +1,6 @@
 ---
 name: linkedin-humanizer
-description: Remove AI tells from any LinkedIn post or comment draft and audit the rules behind every flag. Tier-based scrubber (forensic / strict / aesthetic / all) plus three bundled sub-tools: emoji-pattern detector, AI-detector spread tester (GPTZero, Originality.ai, ZeroGPT, Sapling, Copyleaks), and a rule-explainer reference. Use before publishing any AI-drafted content, or to defend a stylistic choice when a single detector flags it. Keywords humanizer, AI detection, OriginalityAI, GPTZero, scrub AI tells, rewrite human, forensic, strict, aesthetic, emoji detector, rule explainer.
+description: Scrub AI tells from any text draft. Tier-based (forensic / strict / aesthetic / all) rewriter with sub-tools: emoji-pattern detector, multi-detector spread tester (GPTZero, Originality.ai, ZeroGPT, Sapling, Copyleaks), and rule explainer. Use when the user asks to humanize, de-AI, or pass detectors. Rewrites only; for full pre-publish review use linkedin-post-audit.
 ---
 
 # LinkedIn Humanizer V2
@@ -59,85 +59,13 @@ linkedin-humanizer --mode all <text>
 
 ### Pass 1 — SCRUB (delete or replace)
 
-**FORENSIC tier (always on, real AI leakage):**
+The scrub pass applies tiered regex catalogs to delete or replace AI tells. Each tier has its own block of patterns, vocabulary swaps, and phrase-level cleanups. Full regex source, replacement maps, and detection functions live in `references/scrub-rules.md` — load that file when actually executing the scrub.
 
-```
-- oaicite, contentReference, turn0search0, attached_file, grok_card markers → delete entirely
-- "As of my last update [DATE]" / "As of my knowledge cutoff" → delete sentence
-- Phrasal templates: [Your Name], 2025-XX-XX, [Describe X here] → flag for user fill
-- Mad-Libs blanks (consecutive square brackets) → flag for user fill
-- Em dash overuse: 3+ em dashes in a post under 300 words → strip to commas/periods
-- Outline-formula closer: "Despite its X, faces Y. Looking ahead..." → flag/rewrite
-```
+**FORENSIC tier** (always on): real model leakage no human produces. Covers AI tool markers (oaicite, contentReference, turn0search0, attached_file, grok_card), knowledge-cutoff disclaimers ("As of my last update..."), phrasal templates ([Your Name], 2025-XX-XX), em dash overuse (3+ in <300 words), and outline-formula closers ("Despite its X... Looking ahead...").
 
-**STRICT tier (on by default, corporate-speak):**
+**STRICT tier** (default on): corporate-speak that's bad LinkedIn style regardless of origin. Covers punctuation normalization (curly→straight quotes, `--`→period), vocabulary swaps (leverage→use, utilize→use, delve→look, harness→use, foster→build, etc.), filler-adverb deletion (fundamentally, essentially, ultimately, crucially, notably), phrase-level cleanup ("in today's fast-paced world", "at the end of the day", "game-changer", "deep dive", "move the needle"), all 6 forms of negative parallelism per the 2026-04-27 ban, and cliché closer tells ("What do you think?", "Tag someone who needs this").
 
-Punctuation:
-```
-- " " → "  (curly quotes to straight)
-- ' ' → '  (curly apostrophes to straight)
-- -- → . (double dash to period)
-```
-
-Vocabulary (regex strip and replace):
-```
-- leverage → use
-- utilize → use
-- facilitate → help
-- streamline → simplify
-- delve → look
-- navigate → handle
-- unlock → find
-- harness → use
-- foster → build
-- fundamentally → (delete)
-- essentially → (delete)
-- ultimately → (delete)
-- crucially → (delete)
-- notably → (delete)
-- landscape → field (or delete)
-- ecosystem → (contextual)
-- paradigm → approach
-- realm → area
-- seamless → smooth
-- holistic → full
-- nuanced → specific
-```
-
-Phrase-level (full negative parallelism coverage as of 2026-04-27 ban):
-```
-- "It's not just X, it's Y"        → rewrite as paired declaratives
-- "X isn't Y, it's Z"              → rewrite as paired declaratives
-- "Not X, but Y"                   → rewrite without inversion
-- "It's not about X, it's about Y" → rewrite as direct claim
-- "The question isn't X, it's Y"   → rewrite as direct claim
-- "This isn't X. This is Y"        → rewrite as direct claim
-- "In today's fast-paced world"    → delete opener entirely
-- "in the age of AI"               → delete
-- "at the end of the day"          → delete
-- "game-changer"                   → specific descriptor
-- "deep dive"                      → "look" or "analysis"
-- "needle-moving"                  → "real"
-- "move the needle"                → "change the numbers"
-- "paradigm shift"                 → "real shift"
-- "What do you think?" closer      → delete or replace with specific question
-- "Tag someone who needs this"     → delete
-```
-
-**AESTHETIC tier (opt-in only, will flatten literary writing):**
-
-```
-- Single em dash use → period or comma (Dickinson defense ignored)
-- Rule of three: triplet adjectives or triplet clauses → break to 2 or 4 (Lincoln defense ignored)
-- "robust" → solid (every epidemiologist defense ignored)
-- "cultivate" → grow (academic-prose defense ignored)
-- "vibrant" → specific descriptor (Toni Morrison defense ignored)
-- "intricate" / "intricacies" → "complex"
-- "garner" → "get"
-- "showcase" → "show"
-- "underscore" → "show"
-- Passive voice → active where possible (academic writing defense ignored)
-```
+**AESTHETIC tier** (opt-in only, will flatten literary writing): patterns AI uses but humans use legitimately. Covers single em dash use (Dickinson defense ignored), rule-of-three triplets (Lincoln defense ignored), defendable-normal-English vocab (robust→solid, cultivate→grow, vibrant→alive, intricate→complex, garner→get, showcase/underscore→show), and passive voice (academic-writing defense ignored).
 
 ### Pass 2 — BREAK (force burstiness)
 
@@ -164,8 +92,9 @@ If the input lacks these, ask the user for a specific number or anecdote to plug
 
 ## Non-negotiable rules
 
+Global voice rules: see root `SKILL.md` §Voice rules. Additional skill-specific rules:
+
 - Preserve the user's actual claim. Humanizing does not mean changing meaning.
-- Capitalize all names (HubSpot, Claude, etc.).
 - Never introduce facts that weren't in the input. If a number is missing, ask.
 - Keep the user's sentence-level voice quirks (lowercase starts, `..` soft pauses).
 - Negative parallelism is a HARD ban (per Sergey 2026-04-27): the strict tier always strips all 6 forms.
@@ -182,20 +111,7 @@ For emoji-pattern detection (lightbulb, rocket, sparkles signature), see `sub-sk
 
 ## Example
 
-> **Input:**
-> "In today's fast-paced landscape, businesses must fundamentally leverage AI to unlock robust ROI. It's not just about adoption, it's about transformation. As of my last update in January 2024, the trends are clear — here's what I've learned."
->
-> **Output (default mode = forensic + strict):**
-> "businesses need AI to cut costs. adoption is the easy part. transformation is the actual work. here's what we learned running 35k LinkedIn profiles through our system daily."
->
-> **Diff:**
-> - FORENSIC: removed "As of my last update in January 2024" disclaimer
-> - FORENSIC: removed em dash overuse
-> - STRICT: removed "in today's fast-paced landscape" opener
-> - STRICT: removed "fundamentally", "leverage", "unlock"
-> - STRICT: removed "It's not just X, it's Y" negative parallelism, replaced with paired declaratives
-> - PASS 3: added specific number (35k) and named entity (LinkedIn)
-> - AESTHETIC was NOT applied — "robust" stays if it was actually there in source
+See `references/examples.md` for worked examples.
 
 ## Files
 
@@ -217,9 +133,3 @@ For emoji-pattern detection (lightbulb, rocket, sparkles signature), see `sub-sk
 
 - `linkedin-post-audit` — detection-only pass (no rewrite)
 - `linkedin-post-writer` — generates drafts that already pass the humanizer
-
-## Changelog
-
-- **2026-04-28 V3** — folded the former `linkedin-detector-tester`, `linkedin-emoji-detector`, and `linkedin-rules-explainer` skills into this one as `sub-skills/` references and `scripts/`. Same workflows, fewer top-level skills.
-- **2026-04-27 V2** — split rules into forensic / strict / aesthetic tiers. Added `--mode` flag. Added forensic-tier patterns from Wikipedia (oaicite tokens, knowledge-cutoff disclaimers, phrasal templates). Expanded negative parallelism coverage to all 6 forms per Sergey's 2026-04-27 ban.
-- **2026-04-08 V1** — initial release.

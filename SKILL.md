@@ -91,6 +91,8 @@ The thin client lives at `lib/apify_client.py` and exposes `fetch_post`, `fetch_
 9. LinkedIn posts: 900–1,300 chars sweet spot. Comments: 200–350 chars.
 10. Hook lives in the first 210 chars (before "… see more" on mobile).
 
+(Canonical reference, plus comment-specific extensions: `references/voice-rules.md`. See also `references/hook-formulas.md` and `references/algorithm-heuristics.md`.)
+
 ## How URLs map to URNs
 
 LinkedIn ships three post URN types (the library handles all three):

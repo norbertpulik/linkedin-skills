@@ -1,6 +1,6 @@
 ---
 name: linkedin-post-writer
-description: Draft a viral-ready LinkedIn post using a 2026 hook formula. Use when the user wants to write a new LinkedIn post, needs help with a hook, or wants to pick a proven format (platform-risk anaphora, R.I.P. obituary, year-over-year pivot, time-anchor confession, self-proving meta, paid-vs-free reversal, curiosity-gap teaser, odd-precision money ledger, contrarian historical receipts). The skill drafts the post, runs the humanizer pass, shows an approval card, and schedules via Publora on confirmation. Keywords: linkedin post, viral hook, personal brand, founder post, content draft, thought leadership, 2026 algorithm.
+description: Draft a new LinkedIn post from scratch using a 2026 hook formula (anaphora, R.I.P., year-pivot, time-anchor, self-proving, paid-vs-free, curiosity-gap, odd-money, contrarian). Runs the humanizer pass and schedules via Publora on approval. Use when the user asks to write a post, needs a hook, or wants a proven format. Not for editing existing drafts (use linkedin-post-audit).
 ---
 
 # LinkedIn Post Writer
@@ -29,7 +29,7 @@ Ship long-form LinkedIn posts using hook formulas that actually performed in 202
 | F9 | Curiosity-Gap Teaser (MagicPost) | 306, 4.25x | Emergent behavior, behind-the-scenes |
 | F10 | Contrarian + Historical Receipts (a creator) | 3,083 | Sacred-cow takes, AI/tech cycles |
 
-Full skeletons in `references/hook-formulas.md`.
+Full skeletons in `../../references/hook-formulas.md`.
 
 ## Steps
 
@@ -44,18 +44,15 @@ Full skeletons in `references/hook-formulas.md`.
 4. **Humanizer pass.** Strip em dashes, AI vocab, rule-of-three, generic openers. Add at least 1 specific number, 1 named entity, 1 first-person concrete detail per 100 words.
 5. **Run audit.** Optionally invoke `linkedin-post-audit` for algorithm + voice checks before showing to user.
 6. **Approval card.** Show: formula used, full draft, char count, suggested posting window (Tue/Wed/Thu 7:30-9:00 AM local), reaction targets from likely commenters.
-7. **On approval — adapt to the active backend.** Call `lib.active_backend()`:
-   - **`publora`** (PUBLORA_API_KEY set) → schedule via `lib.PubloraClient.create_post` with LinkedIn platformId. If `scheduledTime` omitted, Publora posts ~90s in the future.
-   - **`manual`** (no backend configured — the default) → output the approved post via `lib.manual_mode_message(draft_text, target_url="https://www.linkedin.com/post/new/", kind="post")`. User pastes directly into LinkedIn's post composer. Do NOT attempt to publish programmatically.
-   - **`diy`** (LINKEDIN_SKILLS_CUSTOM_POSTER set) → invoke the custom poster with the post content + optional media URLs.
+7. **On approval.** Call `lib.publish(kind="post", draft_text=<approved>, target_url="https://www.linkedin.com/post/new/", platforms=[{"platform":"linkedin","platformId":<id>}], scheduled_time=<iso_or_None>, media_urls=<list_or_None>)`. The wrapper handles Publora / manual / diy routing.
 
 ## Hard rules (from user feedback)
 
-- No em dashes. Ever. Period.
-- Capitalize all names, companies, products.
+Global voice rules: see root `SKILL.md` §Voice rules. Additional skill-specific rules:
+
 - Never frame LinkedIn as inferior in a LinkedIn post (algo penalty).
 - Don't name-drop the user's product in a way that reads as self-promo. One mention max, and only when it's the natural conclusion, not the pitch.
-- Include at least one moment of real vulnerability or concrete stakes — pure insight posts don't land in 2026.
+- Include at least one moment of real vulnerability or concrete stakes. Pure insight posts don't land in 2026.
 - Vary sentence length aggressively. Mix 3-word sentences and 25-word sentences.
 
 ## Anti-patterns (skill will refuse)
@@ -70,8 +67,8 @@ Full skeletons in `references/hook-formulas.md`.
 
 ## Resources
 
-- `references/hook-formulas.md` — all 10 formula skeletons with worked examples
-- `references/algorithm-heuristics.md` — 2026 posting rules (timing, format, length)
+- `../../references/hook-formulas.md` — all 10 formula skeletons with worked examples
+- `../../references/algorithm-heuristics.md` — 2026 posting rules (timing, format, length)
 - `references/humanizer-checklist.md` — the full scrub list
 
 ## Related skills
