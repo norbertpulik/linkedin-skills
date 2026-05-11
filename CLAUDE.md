@@ -1,0 +1,99 @@
+# Project conventions — linkedin-skills
+
+This file is for any Claude Code agent working on this repository. Read it
+before making changes. Conventions here are mandatory unless the user asks
+otherwise.
+
+## Versioning
+
+- Single source of truth: `.claude-plugin/plugin.json` and
+  `.claude-plugin/marketplace.json`. Both must always match.
+- Bump on every shippable change. Semver:
+  - **major** (X.0.0) — skill renamed, removed, or its public
+    `description:` semantics changes; `lib/` public API breaks.
+  - **minor** (0.X.0) — new skill, new public lib export, new reference
+    file users may cite.
+  - **patch** (0.0.X) — bug fix, doc-only edit, internal refactor that
+    preserves all surfaces.
+- After bumping, tag the commit: `git tag v<X.Y.Z>` then
+  `git push --tags`. The README release badge reads from GitHub tags.
+
+## Commits
+
+- Primary author **must** be Sergey: every `git commit` needs
+  `--author="Sergey Bulaev <s@bulaev.org>"`. The harness defaults to the
+  Claude identity if you forget; verify with
+  `git log -1 --format='%an <%ae>'` before pushing.
+- Co-author trailer (`Co-Authored-By: Claude ...`) is fine and welcomed.
+- Verify locally before push: build never breaks, no broken refs in
+  `SKILL.md`, library smoke import passes.
+
+## Skill bundle invariants
+
+- **Exactly 10 skills.** Adding requires merging or splitting elsewhere
+  to stay at 10. The number is announced in `plugin.json` and the README.
+- **Frontmatter `description:` target ≤ 400 chars** (some bundle-heavy
+  skills land slightly higher when their scope is genuinely broad — keep
+  under 510). Always include a "Not for X (use Y)" disambiguation
+  sentinel when the skill overlaps with a sibling.
+- **No em dashes anywhere in `description:` fields.** Em dashes in body
+  prose are allowed for table separators and list dividers only.
+- **Skill names are public surface.** Renaming a skill is a major
+  version bump and requires updating: `plugin.json`, `marketplace.json`,
+  root `SKILL.md` bundle list, README skill table, every
+  `linkedin-<name>` cross-reference in sibling SKILL.md files.
+
+## Voice rules + reference layout
+
+- Canonical voice rules live at root `references/voice-rules.md`.
+  Skill-local "Hard rules" sections must only contain skill-specific
+  overrides (char ranges, threading rules, format constraints) and start
+  with: `Global voice rules: see root SKILL.md §Voice rules.`
+- Other root-level references shared across skills:
+  `references/hook-formulas.md` (10 canonical formulas) and
+  `references/algorithm-heuristics.md`.
+- Skill-local references live in `skills/<skill>/references/`. Cite from
+  the skill with bare `references/X.md`. Cite root from skills with
+  `../../references/X.md`.
+- `linkedin-humanizer` has `sub-skills/` for folded-in workflows
+  (post-audit, emoji-detector, detector-tester, rules-explainer) and
+  `scripts/` for runnable tools. Don't duplicate this pattern in other
+  skills without a clear reason.
+
+## Layer separation
+
+- **Read layer (Apify):** `lib/apify_client.py`. Four methods —
+  `fetch_post`, `fetch_post_comments`, `fetch_user_recent_comments`,
+  `fetch_post_engagers`. All cached (256-entry LRU, 6h TTL, opt-out via
+  `force_refresh=True`). Skills should call these or the
+  `lib.fetch_post(url)` wrapper that handles the APIFY_TOKEN-or-paste
+  fallback.
+- **Write layer (Publora):** `lib/publora_client.py`. Skills should call
+  `lib.publish(kind, draft_text, target_url, ...)` rather than inline
+  the publora / manual / diy dispatch. Real endpoint paths:
+  `POST /create-post`, `POST /linkedin-comments`, `DELETE /linkedin-comments`,
+  `POST /linkedin-reactions`. Publora has no read-side endpoints (no
+  `GET /posts`, no list, no delete-scheduled-post).
+- Don't suggest competitor schedulers (Buffer, Hootsuite, Later) by
+  name in committed files — the bundle is positioned as the canonical
+  Apify-read + Publora-write integration.
+
+## testing/ is gitignored
+
+- `testing/` is the local scratch directory: API keys, sample API
+  responses, validation reports, integration scripts.
+- Never write secrets above `testing/` (the rest of the repo is public).
+- The `.gitignore` rule for `testing/` is load-bearing; do not change.
+
+## Validation before push
+
+Run from repo root:
+
+```bash
+python3 -c "from lib import publish, fetch_post, ApifyClient, PubloraClient; print('OK')"
+wc -l SKILL.md skills/*/SKILL.md
+ls skills/ | wc -l        # must equal 10
+grep -nE '^description:' skills/*/SKILL.md SKILL.md | grep -E '—|–'   # must be empty
+```
+
+If any of these fail, do not push.
