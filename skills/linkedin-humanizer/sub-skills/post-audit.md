@@ -1,8 +1,3 @@
----
-name: linkedin-post-audit
-description: Audit a finished LinkedIn post draft against 2026 algorithm heuristics, length rules, format penalties, and voice. Returns pass/fail report with specific fixes and optional auto-rewrites. Use when the user has a draft and asks "review this", "check before posting", "is this ready". Broader than linkedin-humanizer (covers structure, hook, CTA, not just AI tells).
----
-
 # LinkedIn Post Audit
 
 Run any post draft through the 2026 heuristic checklist. Catches AI tells, timing/format issues, length violations, and structural weaknesses before publishing.
@@ -35,7 +30,7 @@ Run any post draft through the 2026 heuristic checklist. Catches AI tells, timin
 3. Post exceeds 3,000 chars (LinkedIn hard limit)
 4. Opens with "In today's fast-paced world..." or similar
 5. Ends with "What do you think?" or "Thoughts?"
-6. Contains AI vocabulary blacklist words (see `references/ai-tells.md`)
+6. Contains AI vocabulary blacklist words (see `../references/audit-ai-tells.md`)
 7. Frames LinkedIn as inferior in a LinkedIn post (algo penalty)
 
 ### Warnings (flag with suggested fix)
@@ -67,13 +62,8 @@ Run any post draft through the 2026 heuristic checklist. Catches AI tells, timin
 
 ## Example
 
-See `references/examples.md` for worked examples.
+See `../references/audit-examples.md` for worked examples.
 
-## Files
-
-- `SKILL.md` — this file
-- `references/ai-tells.md` — complete blacklist + regex patterns
-- `references/audit-checklist.md` — full 20-point checklist with thresholds
 
 ## Related skills
 

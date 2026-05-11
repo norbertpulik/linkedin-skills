@@ -1,6 +1,6 @@
 ---
 name: linkedin-post-writer
-description: Draft a new LinkedIn post from scratch using a 2026 hook formula (anaphora, R.I.P., year-pivot, time-anchor, self-proving, paid-vs-free, curiosity-gap, odd-money, contrarian). Runs the humanizer pass and schedules via Publora on approval. Use when the user asks to write a post, needs a hook, or wants a proven format. Not for editing existing drafts (use linkedin-post-audit).
+description: Draft a new LinkedIn post from scratch using a 2026 hook formula (anaphora, R.I.P., year-pivot, time-anchor, self-proving, paid-vs-free, curiosity-gap, odd-money, contrarian). Runs the humanizer pass and schedules via Publora on approval. Use when the user asks to write a post, needs a hook, or wants a proven format. Not for reviewing existing drafts (use linkedin-humanizer --mode audit).
 ---
 
 # LinkedIn Post Writer
@@ -42,7 +42,7 @@ Full skeletons in `../../references/hook-formulas.md`.
    - 0-2 hashtags, placed at end
    - No external links in body (move to first comment)
 4. **Humanizer pass.** Strip em dashes, AI vocab, rule-of-three, generic openers. Add at least 1 specific number, 1 named entity, 1 first-person concrete detail per 100 words.
-5. **Run audit.** Optionally invoke `linkedin-post-audit` for algorithm + voice checks before showing to user.
+5. **Run audit.** Optionally invoke `linkedin-humanizer --mode audit` for algorithm + voice checks before showing to user.
 6. **Approval card.** Show: formula used, full draft, char count, suggested posting window (Tue/Wed/Thu 7:30-9:00 AM local), reaction targets from likely commenters.
 7. **On approval.** Call `lib.publish(kind="post", draft_text=<approved>, target_url="https://www.linkedin.com/post/new/", platforms=[{"platform":"linkedin","platformId":<id>}], scheduled_time=<iso_or_None>, media_urls=<list_or_None>)`. The wrapper handles Publora / manual / diy routing.
 
@@ -73,6 +73,5 @@ Global voice rules: see root `SKILL.md` §Voice rules. Additional skill-specific
 
 ## Related skills
 
-- `linkedin-post-audit` — run this on any draft before publishing
-- `linkedin-humanizer` — aggressive AI-tell scrubber
+- `linkedin-humanizer` — aggressive AI-tell scrubber, plus `--mode audit` for pre-publish review
 - `linkedin-hook-extractor` — reverse-engineer a hook from a viral post you admire

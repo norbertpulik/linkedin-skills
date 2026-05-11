@@ -1,6 +1,6 @@
 ---
 name: linkedin-humanizer
-description: Scrub AI tells from any text draft. Tier-based (forensic / strict / aesthetic / all) rewriter with sub-tools: emoji-pattern detector, multi-detector spread tester (GPTZero, Originality.ai, ZeroGPT, Sapling, Copyleaks), and rule explainer. Use when the user asks to humanize, de-AI, or pass detectors. Rewrites only; for full pre-publish review use linkedin-post-audit.
+description: Scrub AI tells from any text draft OR audit a finished post against the 2026 algorithm heuristic checklist. Tier-based rewriter (forensic / strict / aesthetic / all) plus `--mode audit` for detection-only pass-fail review covering length, hook, CTA, format penalties, AI vocab. Sub-tools: emoji-pattern detector, multi-detector spread tester (GPTZero, Originality.ai, ZeroGPT, Sapling, Copyleaks), rule explainer. Triggers on "humanize", "de-AI", "review this draft", "audit before posting", "is this ready".
 ---
 
 # LinkedIn Humanizer V2
@@ -19,8 +19,8 @@ See `sub-skills/rules-explainer.md` for per-rule justification, defenses, and ci
 
 ## When to use
 
-- Before publishing any AI-drafted post or comment
-- When `linkedin-post-audit` flags AI tells
+- Before publishing any AI-drafted post or comment (rewrite mode)
+- Pre-publish review of a finished draft (audit mode, see `sub-skills/post-audit.md`)
 - When a draft feels off and you can't pinpoint why
 
 ## Input
@@ -53,6 +53,11 @@ linkedin-humanizer --mode aesthetic <text>
 
 # All — every rule. Maximum scrub. Will flatten literary writing.
 linkedin-humanizer --mode all <text>
+
+# Audit — detection-only pass-fail review. No rewrite.
+# Runs the 2026 algorithm checklist: length, hook, CTA, structure, AI tells.
+# Returns Blockers + Warnings + suggested fixes. See sub-skills/post-audit.md.
+linkedin-humanizer --mode audit <text>
 ```
 
 ## The three passes
@@ -115,13 +120,17 @@ See `references/examples.md` for worked examples.
 
 ## Files
 
-- `SKILL.md` — this file (the rewrite scrubber)
+- `SKILL.md` — this file (rewrite scrubber + audit-mode entry)
 - `references/scrub-rules.md` — full regex patterns by tier
 - `references/voice-fingerprint.md` — how to preserve user voice while scrubbing
 - `references/tier-rationale.md` — long-form per-rule justification
 - `references/rules-explainer.md` — machine-readable index of every rule with citations
 - `references/emoji-patterns.md` — AI-correlated emoji frequency table
 - `references/detector-list.md` — supported AI detectors with API endpoints and accuracy notes
+- `references/audit-ai-tells.md` — blacklist + regex used in audit mode
+- `references/audit-checklist.md` — 20-point pre-publish checklist with thresholds
+- `references/audit-examples.md` — worked audit examples
+- `sub-skills/post-audit.md` — pre-publish audit workflow (detection-only, no rewrite)
 - `sub-skills/rules-explainer.md` — when to defend a flagged rule (em dash, rule of three, passive voice)
 - `sub-skills/emoji-detector.md` — scan / score / suggest workflow for emoji density
 - `sub-skills/detector-tester.md` — run text through 5 AI detectors in parallel and report disagreement
@@ -131,5 +140,4 @@ See `references/examples.md` for worked examples.
 
 ## Related skills
 
-- `linkedin-post-audit` — detection-only pass (no rewrite)
 - `linkedin-post-writer` — generates drafts that already pass the humanizer

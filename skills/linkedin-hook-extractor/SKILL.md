@@ -58,4 +58,4 @@ See `../../references/hook-formulas.md` for the 10 canonical formulas with full 
 ## Related skills
 
 - `linkedin-post-writer` — use the extracted template to draft your own
-- `linkedin-post-audit` — audit your draft before shipping
+- `linkedin-humanizer --mode audit` — audit your draft before shipping

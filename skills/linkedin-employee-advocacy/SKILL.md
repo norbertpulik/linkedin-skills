@@ -123,4 +123,5 @@ Stand up a marketing-team LinkedIn advocacy program that scales without killing 
 - `linkedin-post-writer` — each team member uses this for individual drafts
 - `linkedin-profile-optimizer` — team profiles should match before the program launches (otherwise profile clicks convert poorly)
 - `linkedin-content-planner` — each team member gets their own pillar mix
-- `linkedin-engagement-monitor` — track which team members' comments drive inbound
+- `linkedin-thread-monitor` — track which team members' comments drive author replies
+- `linkedin-engager-analytics` — see who's engaging with each team member's posts

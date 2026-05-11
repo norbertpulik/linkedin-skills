@@ -65,7 +65,7 @@ Global voice rules: see root `SKILL.md` §Voice rules. Additional skill-specific
 - 150-300 chars. Replies are tighter than top-level comments.
 - React to the comment you're replying to, not to the parent post.
 - Never paste a canned "thanks!". Either respond with content or don't reply.
-- If the thread is older than 72 hours, consider a DM instead (use `linkedin-engagement-monitor`).
+- If the thread is older than 72 hours, consider a DM instead (use `linkedin-thread-monitor`).
 
 ## Example
 

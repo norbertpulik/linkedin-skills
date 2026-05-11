@@ -12,11 +12,11 @@ A bundle of 10 focused skills for LinkedIn content ops in 2026. Each skill is si
 - **Writing a viral post** → use `linkedin-post-writer`
 - **Commenting on someone else's post** → use `linkedin-comment-drafter`
 - **Replying to a comment** (yours or someone else's) → use `linkedin-reply-handler`
-- **Reviewing a draft before publishing** → use `linkedin-post-audit`
-- **Removing AI tells from text, scoring AI emoji density, defending a flagged rule, or running 5 AI detectors in parallel** → use `linkedin-humanizer` (folds in the former emoji-detector, rules-explainer, and detector-tester sub-tools)
+- **Reviewing a draft before publishing, removing AI tells, scoring AI emoji density, defending a flagged rule, or running 5 AI detectors in parallel** → use `linkedin-humanizer` (rewrite + `--mode audit` pre-publish review; folds in the former post-audit, emoji-detector, rules-explainer, and detector-tester sub-tools)
 - **Extracting a hook formula from a viral post** → use `linkedin-hook-extractor`
 - **Planning a week of LinkedIn content** → use `linkedin-content-planner`
-- **Monitoring replies to your comments + analyzing who liked / commented on any post** → use `linkedin-engagement-monitor`
+- **Tracking which of your comments got author replies** → use `linkedin-thread-monitor`
+- **Analyzing who liked / commented on any post (audience segmentation)** → use `linkedin-engager-analytics`
 - **Auditing / rewriting a LinkedIn profile** → use `linkedin-profile-optimizer`
 - **Running an employee advocacy program across a marketing team** → use `linkedin-employee-advocacy`
 
@@ -58,7 +58,7 @@ Prefer not to SaaS it? Ask Claude Code to build a custom poster (Playwright, Lin
 
 ### Optional: Apify (read-side LinkedIn fetching)
 
-Several skills (`linkedin-comment-drafter`, `linkedin-reply-handler`, `linkedin-engagement-monitor`, `linkedin-hook-extractor`) can read LinkedIn post bodies, comment threads, a user's own recent comments, and the people who liked or commented on any post. They use the Apify platform when an `APIFY_TOKEN` is set; otherwise they ask you to paste the relevant text.
+Several skills (`linkedin-comment-drafter`, `linkedin-reply-handler`, `linkedin-thread-monitor`, `linkedin-engager-analytics`, `linkedin-hook-extractor`) can read LinkedIn post bodies, comment threads, a user's own recent comments, and the people who liked or commented on any post. They use the Apify platform when an `APIFY_TOKEN` is set; otherwise they ask you to paste the relevant text.
 
 1. Sign up free: **https://console.apify.com/sign-up** (free tier ships with $5/month of credit, enough for ~1,000 post fetches or ~1,000 comment-thread fetches).
 2. Generate a token: Console → Settings → Integrations.

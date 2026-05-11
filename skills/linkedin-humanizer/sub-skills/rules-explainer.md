@@ -80,5 +80,5 @@ Examples: a single em dash (Emily Dickinson, Cormac McCarthy), the rule of three
 ## Related skills
 
 - `linkedin-humanizer` — applies the rules (this skill explains them)
-- `linkedin-post-audit` — flags rules in a draft
+- `sub-skills/post-audit.md` (sibling) — flags rules in a draft
 - `sub-skills/detector-tester.md` (sibling) — runs OriginalityAI / GPTZero / Pangram against drafts
