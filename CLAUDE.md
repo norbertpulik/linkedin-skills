@@ -8,15 +8,16 @@ otherwise.
 
 - Single source of truth: `.claude-plugin/plugin.json` and
   `.claude-plugin/marketplace.json`. Both must always match.
-- Bump on every shippable change. Semver:
-  - **major** (X.0.0) — skill renamed, removed, or its public
-    `description:` semantics changes; `lib/` public API breaks.
-  - **minor** (0.X.0) — new skill, new public lib export, new reference
-    file users may cite.
-  - **patch** (0.0.X) — bug fix, doc-only edit, internal refactor that
-    preserves all surfaces.
+- **Default: bump the PATCH segment (3rd level, `0.0.X`).** This is the
+  automatic behavior for every shippable commit, regardless of how
+  large the diff feels. Skill renames, lib API breaks, new features:
+  still PATCH by default.
+- Only bump MINOR or MAJOR when **the user explicitly asks** for a
+  higher rank ("это minor", "make it 2.0", "bump major"). Do not
+  promote on your own initiative even if semver textbook says so.
 - After bumping, tag the commit: `git tag v<X.Y.Z>` then
-  `git push --tags`. The README release badge reads from GitHub tags.
+  `git push origin v<X.Y.Z>`. The README release badge reads from
+  GitHub tags.
 
 ## Commits
 
