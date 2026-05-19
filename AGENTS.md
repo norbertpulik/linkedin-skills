@@ -1,20 +1,20 @@
-# Project conventions — linkedin-skills
+# Project conventions - linkedin-skills
 
-This file is for any Claude Code agent working on this repository. Read it
+This file is for any Codex agent working on this repository. Read it
 before making changes. Conventions here are mandatory unless the user asks
 otherwise.
 
 ## Versioning
 
-- Single source of truth: `.claude-plugin/plugin.json`,
-  `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json`, and
-  `.agents/plugins/marketplace.json`. Plugin manifests must always match on
+- Single source of truth: `.codex-plugin/plugin.json`,
+  `.agents/plugins/marketplace.json`, `.claude-plugin/plugin.json`, and
+  `.claude-plugin/marketplace.json`. Plugin manifests must always match on
   package name and version; marketplace entries must point to the same package;
   author, license, homepage, and the public skill-bundle description must stay
   aligned.
-- Keep `CLAUDE.md` and `AGENTS.md` aligned when changing shared project
-  rules. Claude-specific workflow details belong here; Codex-specific
-  workflow details belong in `AGENTS.md`.
+- Keep `AGENTS.md` and `CLAUDE.md` aligned when changing shared project
+  rules. Codex-specific workflow details belong here; Claude-specific
+  workflow details belong in `CLAUDE.md`.
 - Codex marketplace install uses `.codex-marketplace/linkedin-skills/`.
   Do not edit that generated package by hand. Update the root files first,
   then run `python3 scripts/sync_codex_marketplace.py`.
@@ -23,7 +23,7 @@ otherwise.
   large the diff feels. Skill renames, lib API breaks, new features:
   still PATCH by default.
 - Only bump MINOR or MAJOR when **the user explicitly asks** for a
-  higher rank ("это minor", "make it 2.0", "bump major"). Do not
+  higher rank ("this is minor", "make it 2.0", "bump major"). Do not
   promote on your own initiative even if semver textbook says so.
 - After bumping, two steps are required:
   1. Tag the commit: `git tag -a v<X.Y.Z> -m "..."` + `git push origin v<X.Y.Z>`
@@ -35,10 +35,9 @@ otherwise.
 ## Commits
 
 - Primary author **must** be Sergey: every `git commit` needs
-  `--author="Sergey Bulaev <s@bulaev.org>"`. The harness defaults to the
-  Claude identity if you forget; verify with
+  `--author="Sergey Bulaev <s@bulaev.org>"`. Verify with
   `git log -1 --format='%an <%ae>'` before pushing.
-- Co-author trailer (`Co-Authored-By: Claude ...`) is fine and welcomed.
+- Co-author trailers are fine when appropriate.
 - Verify locally before push: build never breaks, no broken refs in
   `SKILL.md`, library smoke import passes.
 
@@ -46,25 +45,23 @@ otherwise.
 
 - **Exactly 10 skills.** Adding requires merging or splitting elsewhere
   to stay at 10. The number is announced in plugin manifests and the README.
-- **Frontmatter `description:` target ≤ 400 chars** (some bundle-heavy
-  skills land slightly higher when their scope is genuinely broad — keep
+- **Frontmatter `description:` target <= 400 chars** (some bundle-heavy
+  skills land slightly higher when their scope is genuinely broad - keep
   under 510). Always include a "Not for X (use Y)" disambiguation
   sentinel when the skill overlaps with a sibling.
 - **No em dashes anywhere in `description:` fields.** Em dashes in body
   prose are allowed for table separators and list dividers only.
 - **Skill names are public surface.** Renaming a skill is a major
-  version bump and requires updating: `.codex-plugin/plugin.json`,
-  `.agents/plugins/marketplace.json`, `.claude-plugin/plugin.json`,
-  `.claude-plugin/marketplace.json`, root `SKILL.md` bundle list,
-  README skill table, every
-  `linkedin-<name>` cross-reference in sibling SKILL.md files.
+  version bump and requires updating: plugin manifests, marketplace entries,
+  root `SKILL.md` bundle list, README skill table, every `linkedin-<name>`
+  cross-reference in sibling SKILL.md files.
 
 ## Voice rules + reference layout
 
 - Canonical voice rules live at root `references/voice-rules.md`.
   Skill-local "Hard rules" sections must only contain skill-specific
   overrides (char ranges, threading rules, format constraints) and start
-  with: `Global voice rules: see root SKILL.md §Voice rules.`
+  with: `Global voice rules: see root SKILL.md Voice rules.`
 - Other root-level references shared across skills:
   `references/hook-formulas.md` (10 canonical formulas) and
   `references/algorithm-heuristics.md`.
@@ -78,7 +75,7 @@ otherwise.
 
 ## Layer separation
 
-- **Read layer (Apify):** `lib/apify_client.py`. Four methods —
+- **Read layer (Apify):** `lib/apify_client.py`. Four methods -
   `fetch_post`, `fetch_post_comments`, `fetch_user_recent_comments`,
   `fetch_post_engagers`. All cached (256-entry LRU, 6h TTL, opt-out via
   `force_refresh=True`). Skills should call these or the
@@ -91,7 +88,7 @@ otherwise.
   `POST /linkedin-reactions`. Publora has no read-side endpoints (no
   `GET /posts`, no list, no delete-scheduled-post).
 - Don't suggest competitor schedulers (Buffer, Hootsuite, Later) by
-  name in committed files — the bundle is positioned as the canonical
+  name in committed files - the bundle is positioned as the canonical
   Apify-read + Publora-write integration.
 
 ## Codex marketplace package
@@ -122,7 +119,11 @@ python3 -c "from lib import publish, fetch_post, ApifyClient, PubloraClient; pri
 python3 scripts/sync_codex_marketplace.py
 wc -l SKILL.md skills/*/SKILL.md
 ls skills/ | wc -l        # must equal 10
-grep -nE '^description:' skills/*/SKILL.md SKILL.md | grep -E '—|–'   # must be empty
+grep -nE '^description:' skills/*/SKILL.md SKILL.md | grep -P '\\x{2014}|\\x{2013}'   # must be empty
+python3 -m json.tool .codex-plugin/plugin.json >/dev/null
+python3 -m json.tool .agents/plugins/marketplace.json >/dev/null
+python3 -m json.tool .claude-plugin/plugin.json >/dev/null
+python3 -m json.tool .claude-plugin/marketplace.json >/dev/null
 ```
 
 If any of these fail, do not push.

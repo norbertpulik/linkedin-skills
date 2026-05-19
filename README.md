@@ -1,23 +1,40 @@
 <p align="center">
-  <img src="https://shared.co.actor/img/linkedin-skills-hero.jpg" alt="10 Claude Code skills for LinkedIn marketing — open source, MIT licensed" width="900" />
+  <img src="https://shared.co.actor/img/linkedin-skills-hero.jpg" alt="10 Claude Code and Codex skills for LinkedIn marketing — open source, MIT licensed" width="900" />
 </p>
 
-# LinkedIn Marketing Skills for Claude
+# LinkedIn Marketing Skills for Claude Code and Codex
 
 <p align="center">
   <img src="https://img.shields.io/github/v/release/sergebulaev/linkedin-skills?color=1E40AF&label=release" alt="Latest release">
   <img src="https://img.shields.io/badge/Claude_Code-Compatible-D97757?logo=anthropic&logoColor=white" alt="Claude Code Compatible">
+  <img src="https://img.shields.io/badge/Codex-Compatible-111827" alt="Codex Compatible">
   <img src="https://img.shields.io/badge/Claude-Skills-8A63D2" alt="Claude Skills">
   <img src="https://img.shields.io/badge/License-MIT-22C55E.svg" alt="MIT License">
   <img src="https://img.shields.io/github/stars/sergebulaev/linkedin-skills?style=social" alt="GitHub stars">
   <img src="https://img.shields.io/badge/PRs-welcome-F59E0B.svg" alt="PRs Welcome">
 </p>
 
-10 skills that help Claude write LinkedIn posts, comments, and replies in your voice. They draft content, strip AI tells, and wait for your approval before anything gets published. No coding required.
+10 skills that help Claude Code and Codex write LinkedIn posts, comments, and replies in your voice. They draft content, strip AI tells, and wait for your approval before anything gets published. No coding required.
 
 ## Install
 
-Pick whichever way you use Claude:
+Pick whichever way you use Claude Code or Codex:
+
+### Codex CLI
+
+```bash
+codex plugin marketplace add sergebulaev/linkedin-skills
+codex plugin add linkedin-skills@linkedin-skills
+```
+
+To test a local clone before publishing changes:
+
+```bash
+git clone https://github.com/sergebulaev/linkedin-skills.git
+cd linkedin-skills
+codex plugin marketplace add .
+codex plugin add linkedin-skills@linkedin-skills
+```
 
 ### claude.ai (web)
 
@@ -69,7 +86,7 @@ cd linkedin-skills
 
 ## What you can do
 
-Once installed, just talk to Claude. The right skill activates automatically.
+Once installed, just ask Claude Code or Codex for help with LinkedIn. The right skill activates automatically.
 
 **Write a post:**
 > "Write me a LinkedIn post about why AI agencies are replacing traditional ones. Make it viral."
@@ -128,7 +145,7 @@ A typical creator running daily comment ops + a weekly engager-analytics sweep s
 
 ## Optional: auto-post with Publora
 
-By default, skills draft content for you to copy-paste into LinkedIn. If you want Claude to publish directly to your LinkedIn (and optionally to X, Threads, Instagram), connect Publora. It takes about 2 minutes.
+By default, skills draft content for you to copy-paste into LinkedIn. If you want Claude Code or Codex to publish directly to your LinkedIn (and optionally to X, Threads, Instagram), connect Publora. It takes about 2 minutes.
 
 ### What is Publora?
 
@@ -165,7 +182,7 @@ Then open `.env` and replace the placeholders with your real values.
 pip install requests python-dotenv
 ```
 
-**Step 7.** Test it. Ask Claude:
+**Step 7.** Test it. Ask Claude Code or Codex:
 
 > "Schedule a test LinkedIn post via Publora 24 hours from now: 'testing the API connection — will cancel in dashboard'."
 
@@ -186,7 +203,7 @@ Every skill follows these rules automatically:
 
 | Problem | Fix |
 |---|---|
-| Skills don't activate when I ask about LinkedIn | Make sure you installed via the Skills panel or `/plugin install`. Try starting a new conversation. |
+| Skills don't activate when I ask about LinkedIn | Make sure you installed via the Skills panel, `/plugin install`, or `codex plugin add`. Try starting a new conversation. |
 | "Publora API key not provided" | Your `.env` file is missing or in the wrong folder. It should be in the `linkedin-skills/` root. |
 | "401 Unauthorized" from Publora | Your API key expired. Go to Publora Settings > API > Create a new key. |
 | "404 on comment/post" | Your `LINKEDIN_PLATFORM_ID` is wrong. Go to Publora Channels and copy the full `linkedin-...` string. |
@@ -207,7 +224,8 @@ Every skill follows these rules automatically:
 
 ```
 linkedin-skills/
-├── skills/          ← SKILL.md frontmatter; native to Claude Code, others read as markdown
+├── skills/          ← SKILL.md frontmatter; native to Claude Code and Codex, others read as markdown
+├── .codex-marketplace/ ← generated nested Codex package (run scripts/sync_codex_marketplace.py)
 ├── lib/             ← pure Python, works in any agent runtime
 ├── references/      ← pure markdown, works anywhere
 └── scripts/         ← pure Python CLI, works anywhere
@@ -216,9 +234,10 @@ linkedin-skills/
 | Runtime | Auto-discovers skills? | Setup |
 |---|---|---|
 | **Claude Code** (CLI, Desktop, Web, IDE) | Yes | Install via plugin or clone. Skills activate on matching prompts. |
+| **Codex CLI** | Yes | Install via `codex plugin marketplace add sergebulaev/linkedin-skills` and `codex plugin add linkedin-skills@linkedin-skills`. |
 | **Anthropic Managed Agents** (`/v1/agents`) | Yes | Pass skill files in the agent context. |
 | **OpenClaw** | Manual | Mount the repo, add system prompt pointing to `skills/*/SKILL.md`. |
-| **Cursor / Codex / Cline / Aider** | No | Read `SKILL.md` files as prompt context; import `lib/` as Python. |
+| **Cursor / Cline / Aider** | Manual | Read `SKILL.md` files as prompt context; import `lib/` as Python. |
 | **Manus** | No | Upload `references/` as knowledge base. Call Publora API directly. |
 | **LangChain / AutoGen** | No | Use `lib/` as a package; feed `references/` as prompt context. |
 
