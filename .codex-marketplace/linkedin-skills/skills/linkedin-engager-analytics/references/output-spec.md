@@ -6,9 +6,9 @@ Canonical sample outputs for the engager-analytics report. See `SKILL.md` for th
 
 | # | Type | Name | Title | Company | Profile | ICP tier |
 |---|---|---|---|---|---|---|
-| 1 | commenter | Author A | Director | Acme Corp | linkedin.com/in/... | Prospect |
-| 2 | commenter | Author B | Senior PM | Atlassian | linkedin.com/in/... | Aspirational |
-| 3 | liker | a creator | Founder | Solo brand LLC | linkedin.com/in/... | Peer |
+| 1 | commenter | Author A | Director | Cosmetics Co | linkedin.com/in/... | Prospect |
+| 2 | commenter | Author B | Senior PM | Enterprise SaaS Co | linkedin.com/in/... | Aspirational |
+| 3 | liker | Author C | Founder | Solo brand LLC | linkedin.com/in/... | Peer |
 
 ## Tier breakdown
 
@@ -27,7 +27,7 @@ Canonical sample outputs for the engager-analytics report. See `SKILL.md` for th
 
 ## Example run
 
-> Input: analyze engagers on https://www.linkedin.com/posts/your-handle_..., max 100
+> Input: analyze engagers on https://www.linkedin.com/posts/<author>_..., max 100
 
 > Output:
 > - 50 commenters fetched ($0.25)

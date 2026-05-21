@@ -10,7 +10,7 @@ Paste a viral LinkedIn post URL. Get back: which hook formula it uses, the exact
 ## When to use
 
 - User finds a viral post they want to study
-- User wants to replicate a specific creator's pattern (a creator, a creator, etc.)
+- User wants to replicate a specific creator's pattern
 - Before `linkedin-post-writer` to seed a draft with a proven structure
 
 ## Input

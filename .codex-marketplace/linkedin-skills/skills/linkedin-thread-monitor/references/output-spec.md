@@ -6,8 +6,8 @@ Canonical sample outputs for the daily thread-monitoring report. See `SKILL.md` 
 
 | Posted | Author | Post | Comment | Reply? | Stage | Action |
 |---|---|---|---|---|---|---|
-| 18h ago | the author | a SaaS company | "moat moved to taste" | author replied 14h ago | Warm (6-24h window) | Reply now |
-| 22h ago | an author | HubSpot | "integration depth moat" | No | Cold | Skip |
+| 18h ago | Author A | SaaS Co. | "moat moved to taste" | author replied 14h ago | Warm (6-24h window) | Reply now |
+| 22h ago | Author B | Enterprise SaaS | "integration depth moat" | No | Cold | Skip |
 | 3h ago | Author C | AI vendor | "twin economies" | No | Watch | Check in 3h |
 
 ## For each warm thread
@@ -28,6 +28,6 @@ Canonical sample outputs for the daily thread-monitoring report. See `SKILL.md` 
 > Input: monitor sbulaev profile, last 24h
 
 > Output:
-> - 1 warm thread: the author replied 14h ago on a SaaS company post. Current stage: Warm (8-24h). Suggested response ready. Action: post within 2 hours.
+> - 1 warm thread: the author replied 14h ago on their post. Current stage: Warm (8-24h). Suggested response ready. Action: post within 2 hours.
 > - 8 cold threads (no author engagement). Skip.
 > - 3 watching threads (<6h old, author may still reply). Check again in 3-6h.

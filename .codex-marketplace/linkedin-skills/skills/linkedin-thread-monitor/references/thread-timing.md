@@ -12,10 +12,10 @@
 | 24-72h | no author reply | Dormant | — |
 | >72h | any | Dormant — switch to DM | Medium (if inbound-quality) |
 
-## The "warm-reply window" explained
+## The warm-reply window explained
 
 Real example from 2026-04:
-- 14:27 UTC: Serge posted comment on the author's a SaaS company post ("moat moved from tools to taste")
+- 14:27 UTC: Serge posted comment on a CEO's post ("moat moved from tools to taste")
 - 12:06 UTC next day (~22h later): the author replied personally ("How are you building that conviction muscle with your team?")
 - 16:24 UTC that day (~28h after original comment, ~4h after the author's reply): Serge replied with his answer
 

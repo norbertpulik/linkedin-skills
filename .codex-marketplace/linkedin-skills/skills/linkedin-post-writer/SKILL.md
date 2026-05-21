@@ -5,7 +5,7 @@ description: Draft a new LinkedIn post from scratch using a 2026 hook formula (a
 
 # LinkedIn Post Writer
 
-Ship long-form LinkedIn posts using hook formulas that actually performed in 2025-2026 (verified engagement multipliers from a creator, a creator, a creator, a creator, a creator, a creator, MagicPost).
+Ship long-form LinkedIn posts using hook formulas that actually performed in 2025-2026 (verified engagement multipliers).
 
 ## When to use
 
@@ -18,16 +18,16 @@ Ship long-form LinkedIn posts using hook formulas that actually performed in 202
 
 | Code | Formula | Reference eng | Best for |
 |---|---|---|---|
-| F1 | Platform Risk Anaphora (a creator) | 4,240 | Category/platform posts, product-as-fix |
-| F2 | R.I.P. Obituary (a creator) | 3,822 | Era-ending claims, industry pivots |
-| F3 | Year-over-Year Pivot (a creator) | 494, 3.74x | Identity shifts, founder reflection |
-| F4 | Time-Anchor Confession (a creator) | 1,519+ | Vulnerability, voice reset, ICP re-targeting |
-| F5 | Self-Proving Meta (a creator) | 1,082 / 435 comments | Commitment-based posts, tests in public |
-| F6 | Comment-Gate Lead Magnet (Illingworth) | 717-3,008 | List building (use sparingly, capped reach) |
-| F7 | Odd-Precision Money Ledger (a creator) | 1,755, 9.4x | Founder build-log, cost breakdowns |
-| F8 | Paid-vs-Free Reversal (Illingworth) | 550, 19.64x | Free framework give-away |
-| F9 | Curiosity-Gap Teaser (MagicPost) | 306, 4.25x | Emergent behavior, behind-the-scenes |
-| F10 | Contrarian + Historical Receipts (a creator) | 3,083 | Sacred-cow takes, AI/tech cycles |
+| F1 | Platform Risk Anaphora | 4,240 | Category/platform posts, product-as-fix |
+| F2 | R.I.P. Obituary | 3,822 | Era-ending claims, industry pivots |
+| F3 | Year-over-Year Pivot | 494, 3.74x | Identity shifts, founder reflection |
+| F4 | Time-Anchor Confession | 1,519+ | Vulnerability, voice reset, ICP re-targeting |
+| F5 | Self-Proving Meta | 1,082 / 435 comments | Commitment-based posts, tests in public |
+| F6 | Comment-Gate Lead Magnet | 717-3,008 | List building (use sparingly, capped reach) |
+| F7 | Odd-Precision Money Ledger | 1,755, 9.4x | Founder build-log, cost breakdowns |
+| F8 | Paid-vs-Free Reversal | 550, 19.64x | Free framework give-away |
+| F9 | Curiosity-Gap Teaser | 306, 4.25x | Emergent behavior, behind-the-scenes |
+| F10 | Contrarian + Historical Receipts | 3,083 | Sacred-cow takes, AI/tech cycles |
 
 Full skeletons in `../../references/hook-formulas.md`.
 

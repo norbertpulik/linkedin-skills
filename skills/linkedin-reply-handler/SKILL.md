@@ -10,7 +10,7 @@ Drafts a reply to a specific LinkedIn comment. Correctly handles LinkedIn's 2-le
 ## When to use
 
 - User pastes a LinkedIn comment URL (contains `?commentUrn=...`) and says "reply to this"
-- An author (e.g., various authors) replied to the user's comment and the user wants to continue the thread
+- An author replied to the user's comment and the user wants to continue the thread
 - User wants to re-engage a conversation that's gone dormant
 
 ## Input
@@ -71,7 +71,7 @@ Global voice rules: see root `SKILL.md` §Voice rules. Additional skill-specific
 
 > User: "Reply to this: https://www.linkedin.com/feed/update/urn:li:activity:7449018753880834048?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7449018753880834048%2C7449758545140453376%29"
 >
-> Skill: parses → post 7449018753880834048, comment 7449758545140453376. Fetches thread. Sees: the author's post → Serge's comment ("moat moved to taste") → the author's reply ("How are you building that conviction muscle with your team?"). Drafts R1 Answer-Their-Question variant. Shows approval card.
+> Skill: parses → post 7449018753880834048, comment 7449758545140453376. Fetches thread. Sees: post-author's post → Serge's comment ("moat moved to taste") → author's reply ("How are you building that conviction muscle with your team?"). Drafts R1 Answer-Their-Question variant. Shows approval card.
 >
 > User: "post"
 >

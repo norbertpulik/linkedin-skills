@@ -5,7 +5,7 @@ description: Generate a 7-day LinkedIn content plan from a theme, audience, and 
 
 # LinkedIn Content Planner
 
-Produce a 7-day LinkedIn plan built around the 3-pillar discipline (Authority 40-50%, Personal Narrative 30-40%, Community 20-30%) used by top creators. Optionally adds a Product/Offer pillar at 10-15%.
+Produce a 7-day LinkedIn plan built around the 3-pillar discipline (Authority 40-50%, Personal Narrative 30-40%, Community 20-30%). Optionally adds a Product/Offer pillar at 10-15%.
 
 ## When to use
 

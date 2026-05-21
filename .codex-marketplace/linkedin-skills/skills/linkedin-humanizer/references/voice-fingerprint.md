@@ -18,7 +18,7 @@ These are voice signatures, not AI tells. Leave them alone in every tier includi
 | Contractions (`don't`, `it's`, `you're`, `we're`) | Mandatory for natural rhythm. Scrubbing curly apostrophes is fine; expanding contractions is not. |
 | First-person sensory detail (`my hands shook`, `the room went quiet`) | Pass 3 demands these. Never strip. |
 | Specific numbers (`$47k`, `9:14am`, `47 days`) | Pass 3 demands these. Never strip. |
-| Named entities (`a creator`, `HubSpot`, `Tuesday morning`) | Pass 3 demands these. Capitalize properly per non-negotiable rule. |
+| Named entities (`HubSpot`, `Tuesday morning`, brand names) | Pass 3 demands these. Capitalize properly per non-negotiable rule. |
 | Self-correction within a paragraph (`actually no`, `correction:`) | Burstiness signal. Real humans circle back. |
 
 ---

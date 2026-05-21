@@ -44,7 +44,7 @@ Use sparingly. 5x/week works only if comment volume holds at 10-20/day per posti
 ### Mon (comment-only day, target 25-30)
 
 - **5 peer founders** at 5-20k followers (warm reciprocity)
-- **3 aspirational** at 50k+ (a creator, creators)
+- **3 aspirational** at 50k+ (creators 2-3 tiers above you in same niche)
 - **2 prospects** (founders posting AI-product-launch content)
 - **Pattern:** answer-the-closing-question + data-first
 
@@ -90,7 +90,7 @@ The planner emits one of these closed values for the CTA Type column:
 ## Notes
 
 - All timing recs sit inside the Tue/Wed/Thu prime window per `pillars-framework.md`. Fri is post-cutoff (after 2 PM is unsafe, but 9:00 AM is fine).
-- Voice fingerprint: the user's lowercase-start preference is honored across all 4 hooks. Names (creators) capitalized.
+- Voice fingerprint: the user's lowercase-start preference is honored across all 4 hooks. Proper names (people, brands) capitalized.
 - No formula repeated within the week — F7, F4, F9 cover money / vulnerability / teaser cleanly.
 - Pillar mix sums to 100% (40 + 30 + 20 + 10).
 

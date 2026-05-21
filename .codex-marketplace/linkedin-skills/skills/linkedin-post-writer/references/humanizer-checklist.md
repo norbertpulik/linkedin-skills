@@ -87,7 +87,7 @@ Every post must pass this before the approval card is shown. If any fail, rewrit
 
 ## Final voice check
 
-- Capitalize all names (proper names capitalized)
+- Capitalize all proper names (people, companies, products)
 - Capitalize company/product names (HubSpot, Claude, Co.Actor)
 - Don't frame LinkedIn as inferior on LinkedIn
 - Don't name-drop own product more than once

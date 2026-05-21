@@ -6,7 +6,7 @@ Each formula has a skeleton, why it works, and a reference engagement multiplier
 
 ## F1 — Platform Risk Anaphora
 
-**Reference:** a creator, 4,240 eng. Canonical draft: `01-platform-risk-anaphora.md`.
+**Reference:** 4,240 eng. Canonical draft: `01-platform-risk-anaphora.md`.
 
 ```
 {Platform1} can {restrict|shadowban|throttle} you {timing}.
@@ -36,7 +36,7 @@ So I changed how I work:
 
 ## F2 — R.I.P. Category Obituary
 
-**Reference:** a creator, 3,822 eng. Canonical draft: `02-rip-obituary.md`.
+**Reference:** 3,822 eng. Canonical draft: `02-rip-obituary.md`.
 
 ```
 R.I.P. {category}.
@@ -67,7 +67,7 @@ The winners in 2026 aren't {old-winner-type}. They're {new-winner-type}.
 
 ## F3 — Year-over-Year Pivot
 
-**Reference:** a creator, 494 eng (3.74x baseline). Canonical draft: `03-year-over-year-pivot.md`.
+**Reference:** 494 eng (3.74x baseline). Canonical draft: `03-year-over-year-pivot.md`.
 
 ```
 In {last year}, I {humble benchmark}.
@@ -89,7 +89,7 @@ Here's what actually changed.
 
 ## F4 — Time-Anchor Confession
 
-**Reference:** a creator, 1,519+ eng. Canonical draft: `04-time-anchor-confession.md`.
+**Reference:** 1,519+ eng. Canonical draft: `04-time-anchor-confession.md`.
 
 ```
 {N} {days|months|years} ago, I stopped {behavior}.
@@ -117,7 +117,7 @@ What surprised me: [counterintuitive upside, specific wins]
 
 ## F5 — Self-Proving Meta
 
-**Reference:** a creator, 1,082 eng / 435 comments. Canonical draft: `05-self-proving-meta.md`.
+**Reference:** 1,082 eng / 435 comments. Canonical draft: `05-self-proving-meta.md`.
 
 ```
 Most LinkedIn posts die in the first 30 minutes.
@@ -144,7 +144,7 @@ If it's wrong, I owe you a post admitting it.
 
 ## F6 — Comment-Gate Lead Magnet
 
-**Reference:** a creator, 717-3,008 eng. Canonical draft: `06-comment-gate-leadmagnet.md`.
+**Reference:** 717-3,008 eng. Canonical draft: `06-comment-gate-leadmagnet.md`.
 
 ```
 [Authority number: "We've helped creators publish 47,000+ posts in 14 months"]
@@ -172,7 +172,7 @@ Comment "{keyword}" below + connect with me and I'll send the bundle.
 
 ## F7 — Odd-Precision Money Ledger
 
-**Reference:** a creator, 1,755 eng (9.4x baseline). Canonical draft: `07-odd-precision-money.md`.
+**Reference:** 1,755 eng (9.4x baseline). Canonical draft: `07-odd-precision-money.md`.
 
 ```
 {Odd, specific dollar number — "$873.47"}
@@ -198,7 +198,7 @@ Here is every line item, from the ledger, nothing rounded:
 
 ## F8 — Paid-vs-Free Reversal
 
-**Reference:** a creator, 550 eng (19.64x baseline — highest multiplier in the set). Canonical draft: `08-paid-vs-free-reversal.md`.
+**Reference:** 550 eng (19.64x baseline, highest multiplier in the set). Canonical draft: `08-paid-vs-free-reversal.md`.
 
 ```
 I charge {audience} $X for {service}.
@@ -225,7 +225,7 @@ That's the {framework}. Run it today. Most {audience} find 3 fixes in the first 
 
 ## F9 — Curiosity-Gap Teaser
 
-**Reference:** MagicPost, 306 eng (4.25x baseline). Canonical draft: `09-curiosity-gap-teaser.md`.
+**Reference:** 306 eng (4.25x baseline). Canonical draft: `09-curiosity-gap-teaser.md`.
 
 ```
 Yesterday, our {system} did something.
@@ -249,7 +249,7 @@ Something we didn't program it to do.
 
 ## F10 — Contrarian + Historical Receipts
 
-**Reference:** a creator, 3,083 eng. Canonical draft: `10-contrarian-historical.md`.
+**Reference:** 3,083 eng. Canonical draft: `10-contrarian-historical.md`.
 
 ```
 {Sacred cow} has been dying since {year}.
