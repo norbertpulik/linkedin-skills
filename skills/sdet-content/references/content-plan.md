@@ -37,6 +37,16 @@
 | Thu Jul 10 | P2 | difference between quarantining a flaky test and disabling one. most teams do the second and call it the first. quarantine means: isolated, tracked, owner assigned, deadline to fix or delete. | counterintuitive claim | #Playwright #SoftwareTesting | not drafted |
 | Fri Jul 11 | CONTRARIAN | "your e2e tests are not the problem. your app is." everyone blames the tests for being slow and flaky. the tests are showing you the truth. | F10 contrarian | #Playwright #SoftwareTesting | not drafted |
 
+## Week 3 (Jul 14 – Jul 18)
+
+| Day | Pillar | Angle | Format | Hashtags | Status |
+|---|---|---|---|---|---|
+| Tue Jul 15 | P3 | what changes when you test a Banking transaction engine vs a standard web app. determinism, idempotency, audit trail — three requirements most QA content ignores. | practitioner observation | #SoftwareTesting #Fintech | not drafted |
+| Thu Jul 17 | P5 | how to run a test strategy review that EMs actually act on. not a quality report — a cost and risk conversation. | practitioner observation | #SoftwareTesting #QualityAssurance | not drafted |
+| Fri Jul 18 | CAROUSEL | how I structure a Playwright project for a Banking CI pipeline. slides: folder layout, fixture design, network layer, CI config, reporting. | carousel (PDF) | #Playwright #SoftwareTesting | not drafted |
+
+**Week 3 note — video test:** record a 60-90 sec screen recording of Playwright trace viewer catching a real failure. post as a standalone video on any day with no other post. LinkedIn is pushing video hard. low production value is fine — SDETs care if it's real, not if it looks good.
+
 ---
 
 ## Drafted posts
