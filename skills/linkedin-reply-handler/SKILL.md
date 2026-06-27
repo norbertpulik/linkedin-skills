@@ -1,11 +1,11 @@
 ---
 name: linkedin-reply-handler
-description: Draft a reply to a specific existing LinkedIn comment from its URL. Use when the user wants to reply to a comment on any post, or follow up after an author replied to them. Parses the commentUrn, resolves the correct parentComment target (LinkedIn flattens threads to 2 levels), and posts via Publora on approval. Not for top-level comments (use linkedin-comment-drafter).
+description: Draft a reply to a specific existing LinkedIn comment from its URL. Use when the user wants to reply to a comment on any post, or follow up after an author replied to them. Parses the commentUrn, resolves the correct parentComment target (LinkedIn flattens threads to 2 levels), and returns a copy-paste block on approval. Not for top-level comments (use linkedin-comment-drafter).
 ---
 
 # LinkedIn Reply Handler
 
-Drafts a reply to a specific LinkedIn comment. Correctly handles LinkedIn's 2-level thread flattening: if you're replying to a reply, the Publora API needs the TOP-level comment URN as `parentComment`, not the reply's URN.
+Drafts a reply to a specific LinkedIn comment. Correctly handles LinkedIn's 2-level thread flattening: if you're replying to a reply, LinkedIn requires the TOP-level comment URN as `parentComment`, not the reply's URN.
 
 ## When to use
 
@@ -22,7 +22,7 @@ A LinkedIn URL containing `commentUrn=urn:li:comment:(activity:POST,COMMENT_ID)`
 - 1-2 reply drafts, 150-300 chars each
 - Reaction suggestion for the comment being replied to (always react before replying)
 - Thread context summary (who said what, when)
-- Approval card → on user "post", fires reaction + reply via Publora
+- Approval card → on user "post", returns copy-paste block with target URL
 
 ## Steps
 
@@ -34,7 +34,7 @@ A LinkedIn URL containing `commentUrn=urn:li:comment:(activity:POST,COMMENT_ID)`
 4. **Draft the reply.** Follow the engagement templates in `references/reply-templates.md`. If the counterpart asked a question, answer it directly. If they pushed back, concede then sharpen.
 5. **Humanizer pass.** Strip em dashes, AI vocab, enforce varied sentence length.
 6. **Approval card.** Include thread preview (who said what in last 3 turns), the draft, reaction suggestion, and the parentComment URN we'll send.
-7. **On approval.** Call `lib.publish(kind="reply", draft_text=<approved>, target_url=<comment_url>, post_urn=<urn>, platform_id=<id>, parent_comment=<top_level_comment_urn>, reaction_type=<chosen>)`. The wrapper handles Publora / manual / diy routing.
+7. **On approval.** Return the approved draft as a copy-paste block with the target URL. The user pastes it as a reply in LinkedIn.
 
 ## The flattening gotcha
 

@@ -12,7 +12,7 @@ These are voice signatures, not AI tells. Leave them alone in every tier includi
 
 | Pattern | Why it's voice, not AI |
 |---|---|
-| Lowercase sentence starts (`closed our seed on a tuesday...`) | Users like Serge use this as a deliberate cadence cue. Capitalizing flattens their voice. |
+| Lowercase sentence starts (`closed our seed on a tuesday...`) | Deliberate cadence cue. Capitalizing flattens the voice. |
 | `..` as a soft pause | This is the humanizer's officially-blessed alternative to em dash. Removing it has nowhere to go. |
 | Sentence fragments (`Worth it.`, `Every time.`, `Not even close.`) | Pass 2 ADDS fragments. Don't remove the ones already there. |
 | Contractions (`don't`, `it's`, `you're`, `we're`) | Mandatory for natural rhythm. Scrubbing curly apostrophes is fine; expanding contractions is not. |
@@ -20,6 +20,21 @@ These are voice signatures, not AI tells. Leave them alone in every tier includi
 | Specific numbers (`$47k`, `9:14am`, `47 days`) | Pass 3 demands these. Never strip. |
 | Named entities (`HubSpot`, `Tuesday morning`, brand names) | Pass 3 demands these. Capitalize properly per non-negotiable rule. |
 | Self-correction within a paragraph (`actually no`, `correction:`) | Burstiness signal. Real humans circle back. |
+
+## SDET / practitioner terms — preserve unconditionally
+
+These look like candidates for scrubbing but are the author's domain vocabulary. Never strip or substitute.
+
+| Term / pattern | Why it stays |
+|---|---|
+| Tool names: Playwright, pytest, k6, WireMock, Postman, JUnit, Cypress, TestNG, Locust, Gatling, Vitest, Jest, Pact, Karate | Domain vocabulary. Replacing or dropping breaks credibility with the SDET audience. |
+| CI platform names: GitHub Actions, Jenkins, CircleCI, GitLab CI, ArgoCD, Buildkite | Same as above. Never generalize to "the pipeline tool". |
+| `flaky` / `flakey` / `flakiness` | Technical term for non-deterministic test failure. Not an AI tell. |
+| Test-type adjectives: `e2e`, `unit`, `integration`, `contract`, `smoke`, `regression`, `canary` | Precision terms. Don't replace with "comprehensive" or spell out unless context demands it. |
+| Abbreviations: `CI`, `CD`, `CI/CD`, `PR`, `SUT`, `AAA`, `BDD`, `TDD` | Native abbreviations in this author's domain. |
+| Numbers with test-specific units: `87ms`, `3.2s`, `71% coverage`, `43 flakes`, `p95`, `p99` | Pass 3 demands these. Never strip; the unit is part of the meaning. |
+| `false positive`, `false negative`, `coverage gap`, `test debt`, `test oracle` | SDET-specific concepts. Never flag as AI. |
+| `quarantine` (as in quarantine a flaky test) | Domain term. Not the pandemic sense. Never replace with "isolate" or "remove". |
 
 ---
 

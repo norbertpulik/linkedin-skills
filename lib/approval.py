@@ -1,9 +1,10 @@
 """Approval gate helpers.
 
-Every skill that posts to LinkedIn MUST present a draft to the user and wait
-for explicit approval before calling Publora. This file is a thin conventions
-layer, not runtime enforcement — skills should call `render_approval_card`
-to format the draft consistently and then stop until the user says go.
+Every skill that produces content MUST present a draft to the user and wait
+for explicit approval before returning the copy-paste block. This file is a
+thin conventions layer, not runtime enforcement — skills should call
+`render_approval_card` to format the draft consistently and then stop until
+the user says go.
 """
 from __future__ import annotations
 from typing import Optional
@@ -45,5 +46,5 @@ def render_approval_card(
         for k, v in extra_context.items():
             lines.append(f"- **{k}**: {v}")
         lines.append("")
-    lines.append("Reply **post** / **yes** to publish, or suggest edits.")
+    lines.append("Reply **post** / **yes** to get the copy-paste block, or suggest edits.")
     return "\n".join(lines)

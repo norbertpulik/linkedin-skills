@@ -1,11 +1,11 @@
 ---
 name: linkedin-marketing
-description: Plan, draft, audit, and publish LinkedIn posts and comments. Use when the user wants to write a viral LinkedIn post, draft a comment or reply on any LinkedIn post URL, audit a draft against 2026 algorithm heuristics, remove AI tells, extract hook formulas from viral posts, or plan a week of content. Powered by the Publora API for publishing. User provides post/comment URLs, skill drafts content, user approves, then publishes.
+description: Plan, draft, audit, and publish LinkedIn posts and comments. Use when the user wants to write a viral LinkedIn post, draft a comment or reply on any LinkedIn post URL, audit a draft against 2026 algorithm heuristics, remove AI tells, extract hook formulas from viral posts, or plan a week of content. User provides post/comment URLs, skill drafts content, user approves, then returns a copy-paste block.
 ---
 
 # LinkedIn Marketing Skills
 
-A bundle of 10 focused skills for LinkedIn content ops in 2026. Each skill is single-purpose, follows the draft → approval → publish pattern, and uses the [Publora API](https://publora.com) for posting.
+A bundle of 10 focused skills for LinkedIn content ops in 2026. Each skill is single-purpose, follows the draft → approval → copy-paste pattern.
 
 ## When to use this bundle
 
@@ -26,35 +26,19 @@ Every action-taking skill follows three steps:
 
 1. **Parse the input.** User provides a LinkedIn URL (post or comment). The skill uses `lib/url_parser.py` to extract the post URN and any comment ID.
 2. **Draft the content.** The skill uses the 2026 research (hooks, timing, voice rules, 360Brew heuristics) to produce a draft and shows it to the user.
-3. **Wait for approval.** The user replies with "post", "yes", or suggests edits. Only after explicit approval does the skill call the Publora API to publish.
+3. **Wait for approval.** The user replies with "post", "yes", or suggests edits. Only after explicit approval does the skill return the content as a copy-paste block with the target URL.
 
 ## Prerequisites
 
-**Three tiers — pick one.**
+**Two tiers — pick one.**
 
 ### 🟢 Tier 0 — Draft only (default, no setup)
 
-The skills work out of the box. No API keys, no signup. Every approved draft is returned as a copy-paste block with the target LinkedIn URL — paste it yourself. Great for trying the skills before committing to any backend.
-
-### 🔵 Tier 1 — Publora auto-post (recommended, ~2 min)
-
-On approval, skills auto-publish to LinkedIn (and optionally X, Threads) via the [Publora API](https://publora.com). Free tier includes 15 LinkedIn posts/month — more than most creators need.
-
-1. Sign up free: **https://app.publora.com/signup**
-2. Connect your LinkedIn account in Publora (Channels → Add Channel)
-3. Copy your API key from Publora's API panel
-4. Drop into `.env`:
-   ```
-   PUBLORA_API_KEY=sk_...
-   LINKEDIN_PLATFORM_ID=linkedin-...
-   ```
-5. Run `pip install -r requirements.txt`
-
-Why Publora: LinkedIn has three URN types (activity/share/ugcPost), a reaction-bug where `INSIGHTFUL` returns 400, and a 2-level thread-flattening quirk that breaks most third-party implementations. Publora handles all of it. We built on top of their API so we didn't have to.
+The skills work out of the box. No API keys, no signup. Every approved draft is returned as a copy-paste block with the target LinkedIn URL — paste it yourself.
 
 ### ⚫ Tier 2 — Build your own poster (advanced)
 
-Prefer not to SaaS it? Ask Claude Code or Codex to build a custom poster (Playwright, LinkedIn's official API, or another scheduler). Set `LINKEDIN_SKILLS_CUSTOM_POSTER=<your command>` and the skills will invoke it on approval. This is a weekend of work. Publora is 2 minutes.
+Prefer to auto-post? Ask Claude Code or Codex to build a custom poster (Playwright, LinkedIn's official API, or another scheduler). Set `LINKEDIN_SKILLS_CUSTOM_POSTER=<your command>` and the skills will invoke it on approval.
 
 ### Optional: Apify (read-side LinkedIn fetching)
 
@@ -80,18 +64,19 @@ The thin client lives at `lib/apify_client.py` and exposes `fetch_post`, `fetch_
 
 ## Voice rules (baked into every skill)
 
-1. No em dashes (`—`), en dashes, or double dashes — biggest AI tell.
+1. No em dashes (`—`), en dashes, or double dashes. Biggest AI tell.
 2. Use `..` as soft pause when mid-sentence rhythm calls for it.
-3. Capitalize all personal names, company names, and product names. Lowercase reads as disrespectful.
-4. Sentence starts can be lowercase (natural voice), but names inside are always capitalized.
+3. Capitalize personal names, company names, product names, and tool names (Playwright, pytest, GitHub Actions). Lowercase tools read as unfamiliar with the space.
+4. Sentence starts can be lowercase (natural practitioner voice), but names and tools inside are always capitalized.
 5. Avoid AI vocabulary: `leverage`, `fundamentally`, `streamline`, `harness`, `delve`, `unlock`, `foster`.
-6. Specific numbers beat adjectives — `47%` beats `significant`.
-7. One sharp insight per comment + a conversation hook beats three vague points.
-8. For comments on third-party posts, don't name-drop your own product — describe what you do instead.
-9. LinkedIn posts: 900–1,300 chars sweet spot. Comments: 200–350 chars.
-10. Hook lives in the first 210 chars (before "… see more" on mobile).
+6. Avoid hollow SDET phrases: "ensure quality", "comprehensive test coverage", "quality culture", "robust test suite", "shift-left" without specifics.
+7. Name the tool, the metric, or the failure mode. "we added tests" is noise. "we added 40 Playwright specs covering the checkout flow" is a comment worth reading.
+8. Specific numbers beat adjectives — `71% coverage` beats `significant improvement`.
+9. For comments on third-party posts, don't name-drop your own product — describe the capability instead.
+10. LinkedIn posts: 900–1,300 chars sweet spot. Comments: 200–350 chars.
+11. Hook lives in the first 210 chars (before "… see more" on mobile).
 
-(Canonical reference, plus comment-specific extensions: `references/voice-rules.md`. See also `references/hook-formulas.md` and `references/algorithm-heuristics.md`.)
+(Canonical reference: `references/voice-rules.md`. See also `references/hook-formulas.md` and `references/algorithm-heuristics.md`.)
 
 ## How URLs map to URNs
 
@@ -112,16 +97,13 @@ The library decodes the commentUrn fragment and returns both `post_urn` and `com
 ## Known gotchas
 
 - LinkedIn flattens reply threads to 2 levels. When replying to a reply, pass the **top-level** comment URN as `parentComment`, not the reply's URN.
-- `INSIGHTFUL` is NOT a valid Publora reaction type. Use `INTEREST` instead (the client auto-maps).
-- A post URN returned by `url_parser` may be `activity` when the canonical URN is actually `ugcPost`. If posting fails with 404, fall back to resolving via `lib.ApifyClient.fetch_post_comments(post_id=...)` and read the canonical URN from any existing comment's `comment_url`.
-- Publora schedules comments ~90s in the future by default.
+- A post URN returned by `url_parser` may be `activity` when the canonical URN is actually `ugcPost`. Resolve via `lib.ApifyClient.fetch_post_comments(post_id=...)` and read the canonical URN from any existing comment's `comment_url`.
 
 ## Resources
 
-- [Publora API docs](https://docs.publora.com) — full endpoint reference for the publishing layer
 - [Apify console](https://console.apify.com) — manage actors, tokens, and usage for the read layer
-- `lib/publora_client.py`, `lib/apify_client.py` — thin Python clients used by every skill
+- `lib/apify_client.py` — thin Python client used by every skill
 
 ## Acknowledgments
 
-Publishing powered by the [Publora REST API](https://publora.com). Algorithm insights via arXiv 2501.16450 (360Brew) and AuthoredUp 2026 reach data.
+Algorithm insights via arXiv 2501.16450 (360Brew) and AuthoredUp 2026 reach data.

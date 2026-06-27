@@ -1,6 +1,6 @@
 ---
 name: linkedin-comment-drafter
-description: Draft a LinkedIn comment on someone else's post from its URL. Use when the user pastes a post URL and asks to comment, engage, or be first commenter. Produces 1-3 variants in the user's voice, picks a reaction, and schedules via Publora on approval. Not for replying to existing comments (use linkedin-reply-handler).
+description: Draft a LinkedIn comment on someone else's post from its URL. Use when the user pastes a post URL and asks to comment, engage, or be first commenter. Produces 1-3 variants in the user's voice and picks a reaction. Returns a copy-paste block on approval. Not for replying to existing comments (use linkedin-reply-handler).
 ---
 
 # LinkedIn Comment Drafter
@@ -25,7 +25,7 @@ A LinkedIn post URL in any of the standard shapes (see the top-level `SKILL.md` 
 - Pattern label (which of the 7 templates was used)
 - Estimated engagement fit based on what the author typically responds to
 
-Then waits for user approval. On "post", calls Publora to react + comment.
+Then waits for user approval. On "post", returns a copy-paste block with the target URL.
 
 ## Steps
 
@@ -35,7 +35,7 @@ Then waits for user approval. On "post", calls Publora to react + comment.
 4. **Draft comment variants.** Pick 2-3 templates from `references/comment-templates.md` that fit the post's topic. Fill them with user-voice phrasing.
 5. **Run the humanizer pass.** Strip em dashes, AI vocab, uniform sentence rhythm. Add a specific number or named entity if missing.
 6. **Present drafts for approval** using `lib.approval.render_approval_card`. Include: target URL, each variant, reaction suggestion, a one-line "why this template fits".
-7. **On approval.** Call `lib.publish(kind="comment", draft_text=<approved>, target_url=<post_url>, post_urn=<urn>, platform_id=<id>, reaction_type=<chosen>)`. The wrapper handles Publora / manual / diy routing.
+7. **On approval.** Return the approved draft as a copy-paste block with the target URL. The user pastes it into LinkedIn directly.
 
 ## Templates (see `references/comment-templates.md` for full list)
 

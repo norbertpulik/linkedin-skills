@@ -43,8 +43,9 @@ otherwise.
 
 ## Skill bundle invariants
 
-- **Exactly 10 skills.** Adding requires merging or splitting elsewhere
-  to stay at 10. The number is announced in plugin manifests and the README.
+- **This fork has 11 skills** (10 upstream + `sdet-content`). The upstream
+  "exactly 10" constraint does not apply here. Do not remove `sdet-content`
+  to restore parity with upstream.
 - **Frontmatter `description:` target <= 400 chars** (some bundle-heavy
   skills land slightly higher when their scope is genuinely broad - keep
   under 510). Always include a "Not for X (use Y)" disambiguation
@@ -81,15 +82,10 @@ otherwise.
   `force_refresh=True`). Skills should call these or the
   `lib.fetch_post(url)` wrapper that handles the APIFY_TOKEN-or-paste
   fallback.
-- **Write layer (Publora):** `lib/publora_client.py`. Skills should call
-  `lib.publish(kind, draft_text, target_url, ...)` rather than inline
-  the publora / manual / diy dispatch. Real endpoint paths:
-  `POST /create-post`, `POST /linkedin-comments`, `DELETE /linkedin-comments`,
-  `POST /linkedin-reactions`. Publora has no read-side endpoints (no
-  `GET /posts`, no list, no delete-scheduled-post).
-- Don't suggest competitor schedulers (Buffer, Hootsuite, Later) by
-  name in committed files - the bundle is positioned as the canonical
-  Apify-read + Publora-write integration.
+- **Write layer (draft-only):** Skills call `lib.publish(kind, draft_text,
+  target_url, ...)` which returns a copy-paste block. There is no
+  auto-posting backend. If the user has set `LINKEDIN_SKILLS_CUSTOM_POSTER`,
+  the wrapper delegates to that command instead.
 
 ## Codex marketplace package
 
@@ -115,7 +111,7 @@ otherwise.
 Run from repo root:
 
 ```bash
-python3 -c "from lib import publish, fetch_post, ApifyClient, PubloraClient; print('OK')"
+python3 -c "from lib import publish, fetch_post, ApifyClient; print('OK')"
 python3 scripts/sync_codex_marketplace.py
 wc -l SKILL.md skills/*/SKILL.md
 ls skills/ | wc -l        # must equal 10

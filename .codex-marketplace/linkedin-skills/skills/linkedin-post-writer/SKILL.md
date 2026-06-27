@@ -1,6 +1,6 @@
 ---
 name: linkedin-post-writer
-description: Draft a new LinkedIn post from scratch using a 2026 hook formula (anaphora, R.I.P., year-pivot, time-anchor, self-proving, paid-vs-free, curiosity-gap, odd-money, contrarian). Runs the humanizer pass and schedules via Publora on approval. Use when the user asks to write a post, needs a hook, or wants a proven format. Not for reviewing existing drafts (use linkedin-humanizer --mode audit).
+description: Draft a new LinkedIn post from scratch using a 2026 hook formula (anaphora, R.I.P., year-pivot, time-anchor, self-proving, paid-vs-free, curiosity-gap, odd-money, contrarian). Runs the humanizer pass and returns a copy-paste block on approval. Use when the user asks to write a post, needs a hook, or wants a proven format. Not for reviewing existing drafts (use linkedin-humanizer --mode audit).
 ---
 
 # LinkedIn Post Writer
@@ -44,7 +44,7 @@ Full skeletons in `../../references/hook-formulas.md`.
 4. **Humanizer pass.** Strip em dashes, AI vocab, rule-of-three, generic openers. Add at least 1 specific number, 1 named entity, 1 first-person concrete detail per 100 words.
 5. **Run audit.** Optionally invoke `linkedin-humanizer --mode audit` for algorithm + voice checks before showing to user.
 6. **Approval card.** Show: formula used, full draft, char count, suggested posting window (Tue/Wed/Thu 7:30-9:00 AM local), reaction targets from likely commenters.
-7. **On approval.** Call `lib.publish(kind="post", draft_text=<approved>, target_url="https://www.linkedin.com/post/new/", platforms=[{"platform":"linkedin","platformId":<id>}], scheduled_time=<iso_or_None>, media_urls=<list_or_None>)`. The wrapper handles Publora / manual / diy routing.
+7. **On approval.** Return the approved draft as a copy-paste block. The user pastes it into LinkedIn's composer at https://www.linkedin.com/post/new/
 
 ## Hard rules (from user feedback)
 

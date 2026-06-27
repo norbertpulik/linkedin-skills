@@ -65,8 +65,7 @@ codex plugin add linkedin-skills@linkedin-skills
    You have LinkedIn marketing skills in ./linkedin-skills/.
    For any LinkedIn task, read the relevant skills/*/SKILL.md first.
    Use lib/url_parser.py for URL parsing,
-       lib/apify_client.py for reading posts / comments / engagers,
-       lib/publora_client.py for publishing actions.
+       lib/apify_client.py for reading posts / comments / engagers.
    ```
 4. Done. Ask OpenClaw to write a LinkedIn post or comment.
 
@@ -143,51 +142,6 @@ Setup: drop `APIFY_TOKEN=apify_api_...` into your `.env`. The thin client at `li
 
 A typical creator running daily comment ops + a weekly engager-analytics sweep stays under $2/month, well inside the free tier.
 
-## Optional: auto-post with Publora
-
-By default, skills draft content for you to copy-paste into LinkedIn. If you want Claude Code or Codex to publish directly to your LinkedIn (and optionally to X, Threads, Instagram), connect Publora. It takes about 2 minutes.
-
-### What is Publora?
-
-[Publora](https://publora.com) is a publishing API that handles LinkedIn's quirks (3 different URL formats, reaction type mismatches, thread flattening bugs). The free tier gives you 15 posts/month.
-
-### Setup (2 minutes)
-
-**Step 1.** Sign up at https://app.publora.com/signup (free)
-
-**Step 2.** Connect LinkedIn: click **Channels** in the left sidebar, then **Add Channel**, pick **LinkedIn**, authorize.
-
-**Step 3.** Find your Platform ID: go to **Channels**, click your LinkedIn account. The ID looks like `linkedin-ABC123DEF`. Copy the whole thing including `linkedin-`.
-
-**Step 4.** Get your API key: click **Settings** (gear icon, bottom-left), then **API**, then **Create Key**. Copy the `sk_...` string.
-
-**Step 5.** Create a file called `.env` in the linkedin-skills folder:
-
-```
-PUBLORA_API_KEY=sk_paste_your_key_here
-LINKEDIN_PLATFORM_ID=linkedin-paste_your_id_here
-```
-
-If you cloned the repo, you can copy the template instead:
-
-```bash
-cp .env.example .env
-```
-
-Then open `.env` and replace the placeholders with your real values.
-
-**Step 6.** Install two small Python packages:
-
-```bash
-pip install requests python-dotenv
-```
-
-**Step 7.** Test it. Ask Claude Code or Codex:
-
-> "Schedule a test LinkedIn post via Publora 24 hours from now: 'testing the API connection — will cancel in dashboard'."
-
-If Publora returns a scheduled-post ID, you're set. Cancel the post in the Publora dashboard before the scheduled time. If you get HTTP 401, your API key is wrong. If you get HTTP 400 about a missing platformId, your `LINKEDIN_PLATFORM_ID` isn't set. See [Troubleshooting](#troubleshooting).
-
 ## Voice rules
 
 Every skill follows these rules automatically:
@@ -204,10 +158,6 @@ Every skill follows these rules automatically:
 | Problem | Fix |
 |---|---|
 | Skills don't activate when I ask about LinkedIn | Make sure you installed via the Skills panel, `/plugin install`, or `codex plugin add`. Try starting a new conversation. |
-| "Publora API key not provided" | Your `.env` file is missing or in the wrong folder. It should be in the `linkedin-skills/` root. |
-| "401 Unauthorized" from Publora | Your API key expired. Go to Publora Settings > API > Create a new key. |
-| "404 on comment/post" | Your `LINKEDIN_PLATFORM_ID` is wrong. Go to Publora Channels and copy the full `linkedin-...` string. |
-| "400 reactionType" error | Known Publora quirk. The skills handle this automatically. If you're calling the API manually, use PRAISE (not CELEBRATE), INTEREST (not INSIGHTFUL). |
 | `pip install` fails | Use a virtual environment: `python -m venv venv && source venv/bin/activate && pip install requests python-dotenv` |
 
 ## Cross-cutting references
@@ -238,7 +188,7 @@ linkedin-skills/
 | **Anthropic Managed Agents** (`/v1/agents`) | Yes | Pass skill files in the agent context. |
 | **OpenClaw** | Manual | Mount the repo, add system prompt pointing to `skills/*/SKILL.md`. |
 | **Cursor / Cline / Aider** | Manual | Read `SKILL.md` files as prompt context; import `lib/` as Python. |
-| **Manus** | No | Upload `references/` as knowledge base. Call Publora API directly. |
+| **Manus** | No | Upload `references/` as knowledge base. Paste approved drafts manually. |
 | **LangChain / AutoGen** | No | Use `lib/` as a package; feed `references/` as prompt context. |
 
 ### OpenClaw quickstart
@@ -250,15 +200,14 @@ git clone git@github.com:sergebulaev/linkedin-skills.git
 # "You have LinkedIn marketing skills in ./linkedin-skills/.
 #  Read the relevant skills/*/SKILL.md before any LinkedIn task.
 #  Use lib/url_parser.py for URL parsing,
-#      lib/apify_client.py for reading posts / comments / engagers,
-#      lib/publora_client.py for publishing."
+#      lib/apify_client.py for reading posts / comments / engagers."
 ```
 
 ### Generic Python agent quickstart
 
 ```python
 import sys; sys.path.insert(0, "path/to/linkedin-skills")
-from lib import parse_linkedin_url, PubloraClient, ApifyClient
+from lib import parse_linkedin_url, ApifyClient
 
 parsed = parse_linkedin_url("https://www.linkedin.com/posts/slug-activity-7448808898326654978-iW20")
 print(parsed["post_urn"])  # urn:li:activity:7448808898326654978
@@ -267,10 +216,6 @@ print(parsed["post_urn"])  # urn:li:activity:7448808898326654978
 apify = ApifyClient()  # reads APIFY_TOKEN from env
 post = apify.fetch_post(post_url="https://www.linkedin.com/posts/...")
 engagers = apify.fetch_post_engagers(post_url="https://www.linkedin.com/posts/...", max_items=50)
-
-# Write side (Publora)
-client = PubloraClient()  # reads PUBLORA_API_KEY from env
-client.create_comment(post_urn=parsed["post_urn"], message="draft", platform_id="linkedin-xxx")
 ```
 
 ## URL handling
@@ -299,14 +244,13 @@ python lib/url_parser.py "https://www.linkedin.com/posts/<author-handle>_activit
 
 ## References
 
-- [Publora API docs](https://docs.publora.com) — endpoint reference for the publishing layer
 - [Apify console](https://console.apify.com) — manage actors, tokens, and usage for the read layer
 - [360Brew paper](https://arxiv.org/abs/2501.16450) — LinkedIn's ranking foundation model
 - [AuthoredUp 2026 reach data](https://authoredup.com/) — format-level reach benchmarks
 
 ## License
 
-MIT. Powered by [Publora](https://publora.com).
+MIT.
 
 ## Related
 

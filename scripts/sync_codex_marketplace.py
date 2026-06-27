@@ -22,7 +22,6 @@ PATHS_TO_COPY = [
     "lib",
     "scripts",
     "requirements.txt",
-    ".env.example",
     "LICENSE",
 ]
 
