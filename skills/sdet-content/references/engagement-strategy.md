@@ -87,7 +87,7 @@ When the author replies to your comment, LinkedIn notifies their followers. That
 The first 60 minutes after posting determine whether LinkedIn pushes the post further.
 
 1. **Reply to every comment within 30 minutes.** Even a one-line reply counts as engagement.
-2. **Pin a comment yourself** immediately after posting: add the Playwright Production Checklist link as the first comment, not in the post body.
+2. **Pin a comment yourself** immediately after posting: add the Authority OS link as the first comment, not in the post body.
 3. **Go comment on 3-5 other posts** right after publishing. This keeps you active in the algorithm's eyes during the push window.
 4. **Do not edit the post** after publishing. LinkedIn resets the push when you edit.
 
@@ -100,8 +100,8 @@ Every comment you leave sends traffic to your profile. The profile must convert 
 Run `linkedin-profile-optimizer` before scaling comments. Priority fixes for your goal:
 
 1. **Headline** must say what you do + who you help + what result. Not just your job title.
-   - Target format: `Senior SDET | Playwright/TypeScript | Helping QA teams ship faster with less flake`
-2. **Featured section** must have the Playwright Production Checklist as item 1. This is the funnel entry point.
+   - Target format: `Senior SDET & Framework Author | Playwright/TypeScript · Banking · SCADA | Creator of Authority OS`
+2. **Featured section** must have the Authority OS as item 1. This is the funnel entry point.
 3. **About section** hook (first 265 chars before "see more") must speak directly to the SDET audience.
 4. **Custom URL** — claim `linkedin.com/in/norbert-pulik` now if not already done.
 

@@ -15,11 +15,15 @@ Write for the primary audience. The secondary audience reads posts that are prec
 
 ## Positioning
 
-Senior SDET, 6 years. Playwright/TypeScript as the primary automation stack. CI/CD via Jenkins and Docker. Domain experience across SCADA/industrial systems and fintech/banking — two environments where test failures have real consequences (safety or regulatory, not just user complaints).
+Senior SDET, 6 years. Playwright/TypeScript as the primary automation stack. CI/CD via Jenkins, Docker, and Azure DevOps. Currently at Bergauer AG designing enterprise-grade E2E automation frameworks.
+
+Domain experience across two high-stakes environments: Core Banking and SCADA/industrial systems. In both, a single shipped bug costs hundreds of thousands in delayed releases, regulatory scrutiny, or lost client trust. That context shapes everything — architecture decisions, assertion strategy, CI design.
+
+Creator of **Authority OS** — an AI-native, production-ready Playwright framework for engineering teams who ship daily and need instant feedback loops. Features: cross-browser CI out of the box, real-time Allure reporting, automated Notion dashboard updates after every test run.
 
 Credibility beats virality. An engineer audience trusts specifics over superlatives. Lead with what actually happened in a real pipeline or test suite.
 
-**Goal:** build a qualified SDET/QA audience that converts to buyers of Playwright code, test templates, and automation tools. The audience and the buyer are the same person — practitioners who recognise quality work and purchase with their own budget or recommend to their manager. Every post should either teach something actionable or surface a problem the product solves.
+**Goal:** build a qualified SDET/QA audience that converts to buyers of Authority OS and related Playwright tools, templates, and frameworks. The audience and the buyer are the same person — practitioners and engineering managers in high-stakes environments who recognise quality infrastructure and purchase with budget or recommend upward. Every post should either teach something actionable or surface a problem Authority OS solves.
 
 ## Content pillars
 
@@ -63,17 +67,35 @@ Covers: framing flaky CI as an engineering productivity cost (not a QA problem),
 
 Angle: "here's the framing that got budget approved" — outcomes and risk language, not testing-theory language.
 
-## Lead magnet
+### P6 — Breaking into QA without a degree
 
-**Playwright Production Checklist** — the primary funnel entry point. This is how followers become leads and leads become buyers. Every post that touches Playwright, CI, or test quality is a natural opportunity to reference it.
+The non-traditional path into test engineering — no CS degree, no prior experience, learned in production.
+
+Covers: how to build credibility without formal credentials, which skills matter first (automation > manual), how to get the first SDET role, mistakes that slow beginners down, what senior SDETs actually look for when hiring.
+
+Angle: "here's what actually got me from zero to senior SDET in 6 years" — specific, honest, no gatekeeping.
+
+This pillar targets a large, highly-engaged LinkedIn audience (career switchers, self-taught engineers) and drives follows from people who aren't yet practitioners but will be. Mix one P6 post per month with the practitioner pillars. Do not make this the dominant content — credibility with senior practitioners is the primary goal.
+
+**Pre-loaded P6 angles:**
+
+- "does it make sense to start with QA in 2026?" — answer is yes, but not the way most people expect. the manual-first path is the one most likely to be automated away. correct entry point in 2026: automation from day one. learn Playwright, learn CI basics, skip the manual testing phase entirely. contrarian for old-guard QA community, genuine value for beginners. bridges P4 (AI changing QA) with P6 (non-traditional path).
+- "what I'd do differently if I started today" — specific decisions: what to learn first, what to ignore, which job titles to target in month 1 vs month 12.
+- "the QA skills AI can't replace" — infrastructure design, assertion strategy, domain knowledge of regulated systems. the skills that matter are moving up the stack, not disappearing.
+
+## Product — Authority OS
+
+Authority OS is the product. Every post that touches Playwright, CI, assertion strategy, or test architecture is an opportunity to reference it naturally.
 
 Placement rules:
-- Add one line before the closing question when the post topic overlaps with the checklist (assertion patterns, fixture design, network interception, CI integration, flake management).
-- Formula: "I cover more [topic] patterns like this in the Playwright Production Checklist — link in featured section."
+- Add one line before the closing question when the post topic overlaps with Authority OS capabilities (CI setup, reporting, test architecture, flake management, Playwright patterns).
+- Formula: "Authority OS solves this out of the box — link in featured section." or "I built this pattern into Authority OS. link in featured section."
 - One mention per post, never in the opening paragraph, never as the closer.
-- Never: "DM me for the checklist", "comment CHECKLIST below", or any engagement-bait variant.
+- Never: "DM me for access", "comment OS below", or any engagement-bait variant.
 
-When NOT to include: posts on P3 (regulated domains), P5 (strategy/influence), or any post where the Playwright connection is indirect. Don't force it.
+When NOT to include: posts on P5 (strategy/influence for EMs) or any post where the Playwright connection is indirect. Don't force it.
+
+The funnel: post → profile → Authority OS featured section → sale.
 
 ## Contrarian content strategy
 
@@ -99,7 +121,7 @@ Posting to 61 followers has limited reach. Commenting on high-reach posts in the
 - Use `linkedin-comment-drafter` for every Tier 1 comment — same quality bar as posts
 
 **When you publish a post:**
-- Pin the Playwright Production Checklist as the first comment immediately after posting (not in the post body)
+- Pin the Authority OS link as the first comment immediately after posting (not in the post body)
 - Reply to every comment within 30 minutes
 - Go comment on 3-5 other posts right after publishing to stay active in the algorithm's push window
 - Do not edit the post after publishing — LinkedIn resets the push

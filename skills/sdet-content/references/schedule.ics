@@ -1,0 +1,73 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//LinkedIn Skills//SDET Content//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+
+BEGIN:VEVENT
+UID:linkedin-post-w1-tue@sdet-content
+DTSTART:20260701T073000
+DTEND:20260701T080000
+SUMMARY:LinkedIn POST — P4: Claude vs .toBeEnabled()
+DESCRIPTION:Post the .toBeVisible() vs .toBeEnabled() draft.\nDraft in content-plan.md — Week 1 Tuesday.\n\nAfter posting:\n- Reply to every comment within 30 min\n- Comment on 3-5 Playwright posts immediately after publishing\n- Do NOT edit the post after publishing
+END:VEVENT
+
+BEGIN:VEVENT
+UID:linkedin-post-w1-thu@sdet-content
+DTSTART:20260703T073000
+DTEND:20260703T080000
+SUMMARY:LinkedIn POST — P1: Playwright trace viewer in CI
+DESCRIPTION:Post the trace viewer draft.\nDraft in content-plan.md — Week 1 Thursday.\n\nImage: screenshot of Playwright trace viewer from a real failing test.\n\nAfter posting:\n- Reply to every comment within 30 min\n- Comment on 3-5 Playwright posts immediately after publishing\n- Do NOT edit the post after publishing
+END:VEVENT
+
+BEGIN:VEVENT
+UID:linkedin-post-w1-fri@sdet-content
+DTSTART:20260704T073000
+DTEND:20260704T080000
+SUMMARY:LinkedIn POST — CONTRARIAN: 80% coverage is a vanity metric
+DESCRIPTION:Post the coverage contrarian draft.\nDraft in content-plan.md — Week 1 Friday.\n\nREMINDER: replace [X] and [N] with real numbers before posting.\n\nAfter posting:\n- Reply to every comment within 30 min\n- Comment on 3-5 QA posts immediately after publishing\n- Do NOT edit the post after publishing
+END:VEVENT
+
+BEGIN:VEVENT
+UID:linkedin-post-w2-tue@sdet-content
+DTSTART:20260708T073000
+DTEND:20260708T080000
+SUMMARY:LinkedIn POST — P6: Does it make sense to start QA in 2026?
+DESCRIPTION:Draft this post before Tuesday.\nAngle: yes — but skip manual testing. learn Playwright and CI from day one. the manual-first path is what AI is replacing.\n\nSee content-plan.md — Week 2 Tuesday.
+END:VEVENT
+
+BEGIN:VEVENT
+UID:linkedin-post-w2-thu@sdet-content
+DTSTART:20260710T073000
+DTEND:20260710T080000
+SUMMARY:LinkedIn POST — P2: Quarantine vs disable a flaky test
+DESCRIPTION:Draft this post before Thursday.\nAngle: most teams disable and call it quarantine. quarantine means: isolated, tracked, owner assigned, deadline to fix or delete.\n\nSee content-plan.md — Week 2 Thursday.
+END:VEVENT
+
+BEGIN:VEVENT
+UID:linkedin-post-w2-fri@sdet-content
+DTSTART:20260711T073000
+DTEND:20260711T080000
+SUMMARY:LinkedIn POST — CONTRARIAN: your e2e tests are not the problem
+DESCRIPTION:Draft this post before Friday.\nAngle: everyone blames e2e tests for being slow and flaky. the tests are showing you the truth about the app. you're blaming the messenger.\n\nSee content-plan.md — Week 2 Friday.
+END:VEVENT
+
+BEGIN:VEVENT
+UID:linkedin-weekly-review@sdet-content
+DTSTART:20260703T170000
+DTEND:20260703T171500
+SUMMARY:LinkedIn weekly review (10 min)
+DESCRIPTION:Every Friday — 10 minutes:\n1. Follower count delta vs last week\n2. Which post got the most comments? why?\n3. Which comment brought the most profile visits?\n4. One thing to do more of next week\n5. One thing to cut\n\nUpdate content-plan.md status column.
+RRULE:FREQ=WEEKLY;BYDAY=FR
+END:VEVENT
+
+BEGIN:VEVENT
+UID:linkedin-daily-comments@sdet-content
+DTSTART:20260630T083000
+DTEND:20260630T090000
+SUMMARY:LinkedIn — 5-10 comments on Playwright/QA posts
+DESCRIPTION:Daily habit — 30 min max:\n\nSearch: Playwright / test automation / flaky tests / AI testing\nFilter: Past 24 hours — sort by Top\nTarget: posts with 50+ likes\n\nQuality bar: add a specific detail not in the post. name the tool or number. end with a practitioner question.\n\nUse linkedin-comment-drafter for Tier 1 posts.
+RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
+END:VEVENT
+
+END:VCALENDAR
