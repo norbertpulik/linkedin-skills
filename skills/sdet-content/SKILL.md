@@ -19,6 +19,8 @@ Senior SDET, 6 years. Playwright/TypeScript as the primary automation stack. CI/
 
 Credibility beats virality. An engineer audience trusts specifics over superlatives. Lead with what actually happened in a real pipeline or test suite.
 
+**Goal:** build a qualified SDET/QA audience that converts to buyers of Playwright code, test templates, and automation tools. The audience and the buyer are the same person — practitioners who recognise quality work and purchase with their own budget or recommend to their manager. Every post should either teach something actionable or surface a problem the product solves.
+
 ## Content pillars
 
 ### P1 — Playwright in production
@@ -63,9 +65,46 @@ Angle: "here's the framing that got budget approved" — outcomes and risk langu
 
 ## Lead magnet
 
-**Playwright Production Checklist** — a reference for running Playwright in real CI environments. Reference it when natural (e.g., in posts about fixture design, network interception, or CI integration). Never force it. Never end a post with "DM me for the checklist."
+**Playwright Production Checklist** — the primary funnel entry point. This is how followers become leads and leads become buyers. Every post that touches Playwright, CI, or test quality is a natural opportunity to reference it.
 
-Natural placement: "the full checklist is in my featured section" or "I cover this in the Playwright Production Checklist I put together" — one mention max per post.
+Placement rules:
+- Add one line before the closing question when the post topic overlaps with the checklist (assertion patterns, fixture design, network interception, CI integration, flake management).
+- Formula: "I cover more [topic] patterns like this in the Playwright Production Checklist — link in featured section."
+- One mention per post, never in the opening paragraph, never as the closer.
+- Never: "DM me for the checklist", "comment CHECKLIST below", or any engagement-bait variant.
+
+When NOT to include: posts on P3 (regulated domains), P5 (strategy/influence), or any post where the Playwright connection is indirect. Don't force it.
+
+## Contrarian content strategy
+
+Controversy drives comments. Comments drive algorithmic reach. For an SDET audience the right controversy is contrarian takes on testing orthodoxy — things practitioners secretly agree with but nobody says out loud.
+
+**One contrarian post per week.** Mix with practical/instructional content — credibility first, controversy second.
+
+Use hook formula F10 (Contrarian + Historical Receipts) from `../../references/hook-formulas.md`. Every contrarian post needs:
+1. A specific blunt claim in the hook
+2. Real-world evidence (number, example, failure)
+3. A nuance sentence — shows you're fair, not reckless
+4. A practitioner question that invites disagreement
+
+Pre-loaded contrarian positions: see `references/contrarian-takes.md`. Pick one that matches something you've actually seen. Do not post a take you can't defend in comments.
+
+## Growth protocol (priority at under 500 followers)
+
+Posting to 61 followers has limited reach. Commenting on high-reach posts in the niche is the primary growth lever at this stage. See `references/engagement-strategy.md` for the full targeting strategy.
+
+**Daily minimum:**
+- 5-10 targeted comments on Playwright/QA/AI-testing posts with 50+ likes
+- Reply to every comment on your own posts within 30 minutes
+- Use `linkedin-comment-drafter` for every Tier 1 comment — same quality bar as posts
+
+**When you publish a post:**
+- Pin the Playwright Production Checklist as the first comment immediately after posting (not in the post body)
+- Reply to every comment within 30 minutes
+- Go comment on 3-5 other posts right after publishing to stay active in the algorithm's push window
+- Do not edit the post after publishing — LinkedIn resets the push
+
+**Profile:** run `linkedin-profile-optimizer` before scaling comments. Every comment sends traffic to your profile. If the profile doesn't convert visitors to followers, the comments are wasted.
 
 ## Drafting rules
 
@@ -77,6 +116,12 @@ Natural placement: "the full checklist is in my featured section" or "I cover th
 6. **Column the pillar.** Tag each draft with which pillar it serves (P1–P5) so content across sessions doesn't cluster on one topic.
 7. For posts: 900–1,300 chars, hook in first 210 chars, 0–2 hashtags at end, no external links in body (move to first comment).
 8. For comments: 200–350 chars, one concrete detail not already in the parent post, end with a practitioner-specific question.
+
+## Hashtags
+
+Default: `#Playwright #SoftwareTesting` — specific enough to reach practitioners, broad enough for discovery.
+
+Swap `#SoftwareTesting` for `#AI` on posts that are primarily about AI tools in testing (P4). Never use more than 2. Always at the end of the post, never in the body.
 
 ## Output format
 
