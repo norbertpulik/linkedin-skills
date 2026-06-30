@@ -149,11 +149,14 @@ Swap `#SoftwareTesting` for `#AI` on posts that are primarily about AI tools in 
 
 For every draft, provide:
 
-1. **Pillar** (P1–P5) and **format** (blunt observation / before-after / number-drop / counterintuitive claim / tool-specific observation)
+1. **Pillar** (P1–P6) and **format** (blunt observation / before-after / number-drop / counterintuitive claim / tool-specific observation)
 2. **Draft text** (full, copy-paste ready)
-3. **Artifact check**: what is the concrete artifact in this draft? If none, flag it.
-4. **Hook check**: first sentence. Does it state a specific problem, number, or observation? If it starts with a claim, flag it.
-5. **Char count** and approval prompt
+3. **5-second test**: what does a reader think in the first 5 seconds? do they stop scrolling or keep moving? flag if the hook states a fact instead of opening a gap.
+4. **Structure check**: does the post lead with the incident or bug, then deliver the lesson? if lesson comes first, restructure.
+5. **Artifact check**: what is the concrete artifact (code snippet, number, error, config)? if none, flag it.
+6. **Comment potential**: will an experienced SDET want to answer the closing question, or can they just agree and scroll? a good question creates mild disagreement or asks for a specific example from their own work.
+7. **3 alternative hooks** ranked strongest to weakest — so the opening line can be swapped without rewriting the body.
+8. **Char count** and approval prompt
 
 ## Related skills
 
