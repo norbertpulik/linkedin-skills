@@ -77,6 +77,20 @@ Angle: "here's what actually got me from zero to senior SDET in 6 years" — spe
 
 This pillar targets a large, highly-engaged LinkedIn audience (career switchers, self-taught engineers) and drives follows from people who aren't yet practitioners but will be. Mix one P6 post per month with the practitioner pillars. Do not make this the dominant content — credibility with senior practitioners is the primary goal.
 
+**Business model behind P6:**
+
+The fitness-to-SDET story is a transformation narrative — the most monetizable story type. Career switchers outnumber senior SDETs by a large margin and pay for guidance, not tools.
+
+Three models ranked by effort vs return:
+
+1. **Mentorship (start here)** — 1:1 or small group coaching for career switchers. €100–€150/hour. No upfront build. Take 3-5 paid calls first. Those calls reveal exactly what to put in the course.
+2. **Digital course** — "From zero to SDET: no CS degree required." Playwright basics → CI fundamentals → portfolio project → interview prep. €200–€800 one-time. Build after mentorship validates demand.
+3. **Starter kit** — resume template for non-CS SDETs, portfolio project spec, LinkedIn profile guide. €29–€49 on Gumroad. Lowest friction, validates demand quickly.
+
+LinkedIn role: P6 posts build the career-switcher audience organically alongside the practitioner audience. When ready to sell, add a link to featured section. Do not pitch in posts — let the content pull inbound.
+
+Cadence: 1 P6 post per 3-4 practitioner posts. Enough to build the audience without diluting practitioner credibility.
+
 **Pre-loaded P6 angles:**
 
 - "does it make sense to start with QA in 2026?" — answer is yes, but not the way most people expect. the manual-first path is the one most likely to be automated away. correct entry point in 2026: automation from day one. learn Playwright, learn CI basics, skip the manual testing phase entirely. contrarian for old-guard QA community, genuine value for beginners. bridges P4 (AI changing QA) with P6 (non-traditional path).
